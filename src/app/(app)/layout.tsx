@@ -22,6 +22,7 @@ export default async function ApplicationLayout({
       displayName={account.profile?.displayName || "ResellHQ operator"}
       workspaceName={account.workspace.name}
       themePreference={account.profile?.themePreference ?? "system"}
+      userId={account.user.id}
     >
       {children}
     </AppShell>

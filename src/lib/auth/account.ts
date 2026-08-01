@@ -17,7 +17,7 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(
-      "display_name, theme_preference, onboarding_completed, onboarding_completed_at",
+      "display_name, first_name, last_name, business_name, theme_preference, accepted_terms, completed_onboarding, onboarding_completed, onboarding_completed_at",
     )
     .eq("id", user.id)
     .maybeSingle();
@@ -40,7 +40,7 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
     const { data, error } = await supabase
       .from("workspaces")
       .select(
-        "id, name, business_type, country_code, default_currency, locale, time_zone",
+        "id, name, business_type, primary_category, selling_markets, experience_level, selling_channels, country_code, default_currency, locale, time_zone",
       )
       .eq("id", membership.workspace_id)
       .maybeSingle();
@@ -51,6 +51,10 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
         id: data.id,
         name: data.name,
         businessType: data.business_type,
+        primaryCategory: data.primary_category,
+        sellingMarkets: data.selling_markets,
+        experienceLevel: data.experience_level,
+        sellingChannels: data.selling_channels,
         countryCode: data.country_code,
         defaultCurrency: data.default_currency,
         locale: data.locale,
@@ -64,7 +68,12 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
     profile: profile
       ? {
           displayName: profile.display_name ?? "",
+          firstName: profile.first_name ?? "",
+          lastName: profile.last_name ?? "",
+          businessName: profile.business_name,
           themePreference: profile.theme_preference,
+          acceptedTerms: profile.accepted_terms,
+          completedOnboarding: profile.completed_onboarding,
           onboardingCompleted: profile.onboarding_completed,
           onboardingCompletedAt: profile.onboarding_completed_at,
         }

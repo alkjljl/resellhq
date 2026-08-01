@@ -6,6 +6,7 @@ describe("getSafeRedirect", () => {
     expect(getSafeRedirect("/settings/profile?updated=1")).toBe(
       "/settings/profile?updated=1",
     );
+    expect(getSafeRedirect("/settings/team")).toBe("/settings/team");
   });
 
   it.each([

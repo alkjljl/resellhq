@@ -5,7 +5,12 @@ export type CurrentAccount = {
   user: User;
   profile: {
     displayName: string;
+    firstName: string;
+    lastName: string;
+    businessName: string | null;
     themePreference: ThemePreference;
+    acceptedTerms: true | null;
+    completedOnboarding: string | null;
     onboardingCompleted: boolean;
     onboardingCompletedAt: string | null;
   } | null;
@@ -17,6 +22,10 @@ export type CurrentAccount = {
     id: string;
     name: string;
     businessType: string | null;
+    primaryCategory: string | null;
+    sellingMarkets: string[] | null;
+    experienceLevel: string | null;
+    sellingChannels: string[] | null;
     countryCode: string;
     defaultCurrency: string;
     locale: string;
@@ -25,7 +34,12 @@ export type CurrentAccount = {
 };
 
 export function isAccountComplete(account: CurrentAccount) {
-  return account.profile?.onboardingCompleted === true;
+  return Boolean(
+    account.profile?.completedOnboarding ||
+      // Legacy records completed before the authoritative timestamp column was
+      // introduced remain complete without fabricating terms acceptance.
+      account.profile?.onboardingCompleted === true,
+  );
 }
 
 export function hasConsistentWorkspaceData(account: CurrentAccount) {

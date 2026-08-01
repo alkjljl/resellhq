@@ -92,7 +92,13 @@ export function AuthForm({
             required
             aria-invalid={Boolean(state.fieldErrors?.password)}
             aria-describedby={
-              state.fieldErrors?.password ? "password-error" : undefined
+              mode === "signup"
+                ? state.fieldErrors?.password
+                  ? "password-error"
+                  : "password-description"
+                : state.fieldErrors?.password
+                  ? "password-error"
+                  : undefined
             }
           />
         </FormField>

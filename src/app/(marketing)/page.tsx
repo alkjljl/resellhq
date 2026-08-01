@@ -10,9 +10,12 @@ import {
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Brand } from "@/components/shared/brand";
 import { ThemeMenu } from "@/components/shared/theme-menu";
 import { buttonVariants } from "@/components/ui/button";
+import { getCurrentAccount } from "@/lib/auth/account";
+import { resolveRootDestination } from "@/lib/auth/routing";
 
 const workflow = [
   ["Source", "Record what you bought and the true acquisition cost.", "Upcoming"],
@@ -44,7 +47,10 @@ const capabilities = [
   },
 ] as const;
 
-export default function MarketingPage() {
+export default async function MarketingPage() {
+  const destination = await resolveRootDestination(getCurrentAccount);
+  if (destination) redirect(destination);
+
   return (
     <div className="bg-[var(--canvas)] text-[var(--ink)]">
       <header className="sticky top-0 z-30 border-b border-[var(--line)] bg-[var(--surface)]">
@@ -79,7 +85,7 @@ export default function MarketingPage() {
           <div className="mx-auto grid min-h-[690px] max-w-[1240px] items-center gap-12 px-5 py-16 sm:px-7 lg:grid-cols-[1.03fr_.97fr] lg:px-9 lg:py-20">
             <div>
               <p className="eyebrow">The operating system for independent resale</p>
-              <h1 className="mt-5 max-w-3xl text-[46px] font-semibold leading-[0.98] tracking-[-0.06em] sm:text-[64px] lg:text-[72px]">
+              <h1 className="display-heading mt-5 max-w-3xl text-[46px] leading-[0.98] tracking-[-0.06em] sm:text-[64px] lg:text-[72px]">
                 Run the business behind every resale.
               </h1>
               <p className="mt-7 max-w-xl text-base leading-7 text-[var(--ink-muted)] sm:text-lg">
@@ -95,22 +101,18 @@ export default function MarketingPage() {
                   Create your workspace <ArrowRight className="size-4" />
                 </Link>
                 <a
-                  href="#phase-one"
+                  href="#product"
                   className={buttonVariants({ variant: "secondary", size: "lg" })}
                 >
-                  See what is ready
+                  View the product
                 </a>
               </div>
-              <p className="mt-5 text-xs leading-5 text-[var(--ink-faint)]">
-                Phase 1 provides secure accounts, workspaces, regional defaults,
-                and the application foundation.
-              </p>
             </div>
 
             <div className="relative">
               <div className="border border-[var(--line-strong)] bg-[var(--canvas)] p-3 shadow-[var(--shadow-md)]">
                 <div className="border border-[var(--line)] bg-[var(--surface)]">
-                  <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-3">
+                  <div className="flex items-center border-b border-[var(--line)] px-4 py-3">
                     <div className="flex items-center gap-2">
                       <span className="grid size-7 place-items-center rounded-md bg-[var(--accent)] text-[var(--accent-ink)]">
                         <Store className="size-4" />
@@ -120,7 +122,6 @@ export default function MarketingPage() {
                         <p className="text-[10px] text-[var(--ink-faint)]">Foundation map</p>
                       </div>
                     </div>
-                    <span className="status-pill">Phase 1 active</span>
                   </div>
                   <div className="grid sm:grid-cols-[150px_1fr]">
                     <div className="border-b border-[var(--line)] p-3 sm:border-b-0 sm:border-r">
@@ -290,11 +291,11 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        <section id="phase-one" className="scroll-mt-20 border-b border-[var(--line)] bg-[var(--surface)]">
+        <section id="product" className="scroll-mt-20 border-b border-[var(--line)] bg-[var(--surface)]">
           <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-20 sm:px-7 lg:grid-cols-[.8fr_1.2fr] lg:px-9 lg:py-24">
             <div>
               <LockKeyhole className="size-6 text-[var(--accent)]" />
-              <p className="eyebrow mt-5">Available in Phase 1</p>
+              <p className="eyebrow mt-5">Ready to use</p>
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.045em]">
                 Start with a foundation you will keep.
               </h2>

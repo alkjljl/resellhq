@@ -1,74 +1,89 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-sans: var(--font-ui);
+  --font-serif: var(--font-display);
+  --font-mono: var(--font-data);
+}
+
 :root {
   color-scheme: light;
-  --canvas: #f5f4f0;
-  --surface: #ffffff;
-  --surface-subtle: #f0f1f4;
-  --surface-strong: #e3e5ea;
-  --sidebar: #f8f8f6;
-  --ink: #181a1f;
-  --ink-muted: #5c626e;
-  --ink-faint: #686f7a;
-  --line: #dedfe3;
-  --line-strong: #c5c8d0;
-  --accent: #315fca;
-  --accent-hover: #254eac;
-  --accent-strong: #1f4599;
-  --accent-ink: #ffffff;
-  --accent-soft: #e8eeff;
-  --accent-line: #bdcbf2;
-  --accent-inverse: #9bb5ff;
-  --nav-active: #e8ecf5;
-  --success: #2c5ebd;
-  --success-soft: #e9efff;
-  --success-line: #bdcdf5;
-  --danger: #a33a40;
-  --danger-soft: #f8e9ea;
-  --danger-line: #e6b8bc;
-  --focus: #315fca;
-  --focus-soft: rgb(49 95 202 / 0.2);
-  --contrast-surface: #111318;
-  --contrast-ink: #f7f8fb;
-  --contrast-muted: #aeb4bf;
-  --contrast-line: #373b44;
-  --shadow-sm: 0 2px 8px rgb(28 31 38 / 0.07);
-  --shadow-md: 0 12px 34px rgb(28 31 38 / 0.12);
-  --shadow-lg: 0 24px 60px rgb(15 17 22 / 0.19);
+  --font-ui:
+    "General Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-display: "Gambetta", Georgia, "Times New Roman", ui-serif, serif;
+  --font-data:
+    "Azeret Mono", "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace,
+    monospace;
+  --canvas: #f3f0e8;
+  --canvas-header: rgb(243 240 232 / 0.94);
+  --surface: #faf8f2;
+  --surface-subtle: #eee9de;
+  --surface-strong: #e5dfd2;
+  --sidebar: #ebe7dc;
+  --ink: #211e18;
+  --ink-muted: #655f54;
+  --ink-faint: #898174;
+  --line: #d8d1c4;
+  --line-strong: #bfb5a5;
+  --accent: #c87b2a;
+  --accent-hover: #ae661d;
+  --accent-strong: #9b5a19;
+  --accent-ink: #21170b;
+  --accent-soft: #f5dfbf;
+  --accent-line: #d9a461;
+  --accent-inverse: #e6ad64;
+  --nav-active: #ded6c8;
+  --success: #35735a;
+  --success-soft: #e0eee5;
+  --success-line: #a7c7b5;
+  --danger: #a64b43;
+  --danger-soft: #f6e5e1;
+  --danger-line: #dcb6b0;
+  --focus: #a96018;
+  --focus-soft: rgb(185 111 32 / 0.18);
+  --contrast-surface: #171612;
+  --contrast-ink: #f8f3e8;
+  --contrast-muted: #b4ac9e;
+  --contrast-line: #39362f;
+  --shadow-sm: 0 2px 8px rgb(53 43 29 / 0.06);
+  --shadow-md: 0 14px 36px rgb(53 43 29 / 0.1);
+  --shadow-lg: 0 24px 60px rgb(42 34 24 / 0.16);
 }
 
 .dark {
   color-scheme: dark;
-  --canvas: #090a0c;
-  --surface: #111318;
-  --surface-subtle: #181b21;
-  --surface-strong: #242832;
-  --sidebar: #0d0f13;
-  --ink: #f3f5f9;
-  --ink-muted: #a9b0bd;
-  --ink-faint: #7f8795;
-  --line: #292d35;
-  --line-strong: #3c424e;
-  --accent: #5f86ed;
-  --accent-hover: #7698f3;
-  --accent-strong: #a8bdff;
-  --accent-ink: #081126;
-  --accent-soft: #17213a;
-  --accent-line: #304878;
-  --accent-inverse: #91adff;
-  --nav-active: #181f2d;
-  --success: #9bb6ff;
-  --success-soft: #151e34;
-  --success-line: #2d4474;
-  --danger: #ff9297;
-  --danger-soft: #2c1a1d;
-  --danger-line: #66343a;
-  --focus: #88a6ff;
-  --focus-soft: rgb(104 141 246 / 0.25);
-  --contrast-surface: #050608;
-  --contrast-ink: #f7f8fb;
-  --contrast-muted: #aab1bd;
-  --contrast-line: #2d323b;
+  --canvas: #0c0d0a;
+  --canvas-header: rgb(12 13 10 / 0.94);
+  --surface: #141510;
+  --surface-subtle: #1b1c16;
+  --surface-strong: #25261f;
+  --sidebar: #11120e;
+  --ink: #f1eee6;
+  --ink-muted: #aaa499;
+  --ink-faint: #706d65;
+  --line: #2c2d25;
+  --line-strong: #48473d;
+  --accent: #efa94f;
+  --accent-hover: #f4b760;
+  --accent-strong: #e7a248;
+  --accent-ink: #261706;
+  --accent-soft: #2a2115;
+  --accent-line: #674b29;
+  --accent-inverse: #e9ad5e;
+  --nav-active: #28251d;
+  --success: #7fb398;
+  --success-soft: #16241c;
+  --success-line: #365b46;
+  --danger: #e58b82;
+  --danger-soft: #2c1b18;
+  --danger-line: #663a34;
+  --focus: #e9aa59;
+  --focus-soft: rgb(239 169 79 / 0.22);
+  --contrast-surface: #070805;
+  --contrast-ink: #f5f0e5;
+  --contrast-muted: #aaa399;
+  --contrast-line: #2c2d25;
   --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.24);
   --shadow-md: 0 12px 34px rgb(0 0 0 / 0.38);
   --shadow-lg: 0 24px 60px rgb(0 0 0 / 0.5);
@@ -87,9 +102,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  font-family: var(--font-ui);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -117,6 +130,126 @@ button {
   line-height: 1.25;
   text-transform: uppercase;
   color: var(--ink-faint);
+}
+
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.font-data,
+.data-value {
+  font-family: var(--font-data);
+  font-feature-settings:
+    "tnum" 1,
+    "lnum" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.dashboard-canvas {
+  min-height: calc(100vh - 58px);
+  background-color: var(--canvas);
+}
+
+.dashboard-button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 4px;
+  padding: 0 1rem;
+  font-size: 10px;
+  font-weight: 600;
+  outline: none;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.dashboard-button:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus);
+}
+
+.dashboard-button-primary {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.dashboard-button-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.dashboard-button-secondary {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+}
+
+.dashboard-button-secondary:hover {
+  background: var(--surface-subtle);
+}
+
+.profit-ticket {
+  position: relative;
+  overflow: hidden;
+  min-height: 248px;
+  border: 1px solid var(--line-strong);
+  border-radius: 19px;
+  background: var(--surface);
+  padding: 26px;
+}
+
+.profit-ticket::before,
+.profit-ticket::after {
+  position: absolute;
+  top: 64%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--canvas);
+  content: "";
+}
+
+.profit-ticket::before {
+  left: -11px;
+}
+
+.profit-ticket::after {
+  right: -11px;
+}
+
+.ticket-rule {
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    var(--line) 50%,
+    transparent 50%
+  );
+  background-size: 5px 1px;
+}
+
+.ledger-panel {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.profit-plot {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 20% 100%, 100% 25%;
+}
+
+@media (max-width: 639px) {
+  .profit-ticket {
+    padding: 22px 18px;
+  }
 }
 
 .status-pill {

@@ -1,0 +1,93 @@
+name: Phase 1 Acceptance
+
+on:
+  push:
+    branches:
+      - phase1-acceptance-ci
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase1-acceptance-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  acceptance:
+    name: Local Supabase and browser acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: "true"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Reject remote Supabase credentials and production targeting
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden=(
+            SUPABASE_ACCESS_TOKEN
+            SUPABASE_DB_PASSWORD
+            SUPABASE_SERVICE_ROLE_KEY
+            PHASE1_TEST_SUPABASE_SECRET_KEY
+          )
+          for name in "${forbidden[@]}"; do
+            if [[ -n "${!name:-}" ]]; then
+              echo "::error::Remote Supabase credential variable ${name} must not be present."
+              exit 1
+            fi
+          done
+          if [[ "${PHASE1_TEST_SUPABASE_PROJECT_REF:-}" == "fyosviaioflewfqcdkmx" ]]; then
+            echo "::error::Refusing the production Supabase project reference."
+            exit 1
+          fi
+          echo "No remote Supabase credentials or production project target are configured."
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Verify pinned acceptance tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$(npx --no-install supabase --version)" == "2.109.1" ]]
+          node -e "const fs=require('node:fs');const p=JSON.parse(fs.readFileSync('node_modules/@playwright/test/package.json','utf8'));if(p.version!=='1.61.1')process.exit(1)"
+          echo "Pinned Supabase CLI and Playwright versions verified."
+
+      - name: Install Chromium and Linux dependencies
+        run: npx --no-install playwright install --with-deps chromium
+
+      - name: Run complete Phase 1 acceptance suite against local Supabase
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p test-results
+          npm run test:acceptance 2>&1 | tee test-results/phase1-acceptance.log
+
+      - name: Upload safe failure reports
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: phase1-acceptance-failure-${{ github.run_id }}
+          path: test-results/
+          if-no-files-found: ignore
+          include-hidden-files: false
+          retention-days: 7
+
+      - name: Stop local Supabase
+        if: always()
+        continue-on-error: true
+        run: npx --no-install supabase stop --no-backup

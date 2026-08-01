@@ -24,6 +24,32 @@ export const BUSINESS_TYPES = [
   "Other",
 ] as const;
 
+export const PRIMARY_CATEGORIES = [
+  "Clothing & accessories",
+  "Shoes",
+  "Electronics",
+  "Home & living",
+  "Collectibles",
+  "Other",
+] as const;
+
+export const EXPERIENCE_LEVELS = [
+  "Just starting",
+  "Less than 1 year",
+  "1-3 years",
+  "3-5 years",
+  "5+ years",
+] as const;
+
+export const SELLING_CHANNELS = [
+  "eBay",
+  "Vinted",
+  "Depop",
+  "Kleinanzeigen",
+  "Personal store",
+  "In-person",
+] as const;
+
 export const FALLBACK_CURRENCIES = [
   "AUD","BRL","CAD","CHF","CNY","CZK","DKK","EUR","GBP","HKD","HUF","IDR","ILS",
   "INR","JPY","KRW","MXN","MYR","NOK","NZD","PHP","PLN","RON","SEK","SGD","THB",

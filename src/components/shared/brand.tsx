@@ -20,13 +20,19 @@ export function Brand({
       aria-label="ResellHQ home"
     >
       <span
-        className="relative grid size-8 place-items-center rounded-md bg-[var(--accent)]"
+        className="relative grid size-7 place-items-center border border-[var(--accent-line)] bg-[var(--accent-soft)]"
         aria-hidden="true"
       >
-        <span className="size-3.5 rotate-45 border-2 border-[var(--accent-ink)]" />
-        <span className="absolute size-1.5 bg-[var(--accent-ink)]" />
+        <span className="flex h-3.5 items-end gap-[2px]">
+          <span className="h-2 w-[2px] bg-[var(--accent)]" />
+          <span className="h-3.5 w-[2px] bg-[var(--accent)]" />
+          <span className="h-2.5 w-[2px] bg-[var(--accent)]" />
+        </span>
+        <span className="absolute bottom-1.5 h-px w-3.5 bg-[var(--accent)]" />
       </span>
-      {!compact ? <span className="text-[17px]">ResellHQ</span> : null}
+      {!compact ? (
+        <span className="display-heading text-[18px] font-semibold">ResellHQ</span>
+      ) : null}
     </Link>
   );
 }

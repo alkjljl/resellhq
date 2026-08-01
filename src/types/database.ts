@@ -8,8 +8,13 @@ export type Database = {
         Row: {
           id: string;
           display_name: string | null;
+          first_name: string | null;
+          last_name: string | null;
+          business_name: string | null;
           avatar_path: string | null;
           theme_preference: ThemePreference;
+          accepted_terms: true | null;
+          completed_onboarding: string | null;
           onboarding_completed: boolean;
           onboarding_completed_at: string | null;
           created_at: string;
@@ -18,8 +23,13 @@ export type Database = {
         Insert: {
           id: string;
           display_name?: string | null;
+          first_name?: string | null;
+          last_name?: string | null;
+          business_name?: string | null;
           avatar_path?: string | null;
           theme_preference?: ThemePreference;
+          accepted_terms?: true | null;
+          completed_onboarding?: string | null;
           onboarding_completed?: boolean;
           onboarding_completed_at?: string | null;
           created_at?: string;
@@ -27,8 +37,13 @@ export type Database = {
         };
         Update: {
           display_name?: string | null;
+          first_name?: string | null;
+          last_name?: string | null;
+          business_name?: string | null;
           avatar_path?: string | null;
           theme_preference?: ThemePreference;
+          accepted_terms?: true | null;
+          completed_onboarding?: string | null;
           onboarding_completed?: boolean;
           onboarding_completed_at?: string | null;
           updated_at?: string;
@@ -40,6 +55,10 @@ export type Database = {
           id: string;
           name: string;
           business_type: string | null;
+          primary_category: string | null;
+          selling_markets: string[] | null;
+          experience_level: string | null;
+          selling_channels: string[] | null;
           country_code: string;
           default_currency: string;
           locale: string;
@@ -51,6 +70,10 @@ export type Database = {
           id?: string;
           name: string;
           business_type?: string | null;
+          primary_category?: string | null;
+          selling_markets?: string[] | null;
+          experience_level?: string | null;
+          selling_channels?: string[] | null;
           country_code: string;
           default_currency: string;
           locale: string;
@@ -61,6 +84,10 @@ export type Database = {
         Update: {
           name?: string;
           business_type?: string | null;
+          primary_category?: string | null;
+          selling_markets?: string[] | null;
+          experience_level?: string | null;
+          selling_channels?: string[] | null;
           country_code?: string;
           default_currency?: string;
           locale?: string;
@@ -90,15 +117,30 @@ export type Database = {
     Functions: {
       complete_onboarding: {
         Args: {
-          p_display_name: string;
-          p_workspace_name: string;
-          p_business_type: string | null;
+          p_first_name: string;
+          p_last_name: string;
+          p_business_name?: string | null;
+          p_business_type: string;
+          p_primary_category: string;
           p_country_code: string;
           p_default_currency: string;
+          p_selling_markets: string[];
+          p_experience_level: string;
+          p_selling_channels: string[];
+          p_accepted_terms: boolean;
           p_locale: string;
           p_time_zone: string;
         };
         Returns: string;
+      };
+      update_business_settings: {
+        Args: {
+          p_workspace_name: string;
+          p_business_name: string | null;
+          p_business_type: string;
+          p_country_code: string;
+        };
+        Returns: undefined;
       };
       update_preferences: {
         Args: {

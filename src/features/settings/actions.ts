@@ -9,6 +9,7 @@ import {
   preferencesSchema,
   profileSchema,
 } from "@/lib/validation/account";
+import { buildUpdateBusinessSettingsArgs } from "./business-payload";
 
 function invalid(
   fieldErrors: Record<string, string[] | undefined>,
@@ -73,14 +74,10 @@ export async function saveBusinessAction(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("workspaces")
-    .update({
-      name: parsed.data.workspaceName,
-      business_type: parsed.data.businessType || null,
-      country_code: parsed.data.countryCode,
-    })
-    .eq("id", account.workspace.id);
+  const { error } = await supabase.rpc(
+    "update_business_settings",
+    buildUpdateBusinessSettingsArgs(parsed.data),
+  );
 
   if (error) {
     return {

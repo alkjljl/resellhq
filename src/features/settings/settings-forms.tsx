@@ -22,6 +22,7 @@ import {
   businessSchema,
   preferencesSchema,
   profileSchema,
+  type BusinessInput,
   type BusinessValues,
   type PreferencesValues,
   type ProfileValues,
@@ -101,7 +102,14 @@ export function ProfileSettingsForm({
         <Input
           id="displayName"
           autoComplete="name"
-          aria-invalid={Boolean(form.formState.errors.displayName)}
+          aria-invalid={Boolean(
+            form.formState.errors.displayName ?? state.fieldErrors?.displayName,
+          )}
+          aria-describedby={
+            form.formState.errors.displayName ?? state.fieldErrors?.displayName
+              ? "displayName-error"
+              : undefined
+          }
           {...form.register("displayName")}
         />
       </FormField>
@@ -110,7 +118,13 @@ export function ProfileSettingsForm({
         label="Account email"
         description="Email changes are managed through your authentication provider."
       >
-        <Input id="accountEmail" value={email} readOnly disabled />
+        <Input
+          id="accountEmail"
+          value={email}
+          readOnly
+          disabled
+          aria-describedby="accountEmail-description"
+        />
       </FormField>
       <FormStatus state={state} />
       <div className="flex justify-end border-t border-[var(--line)] pt-5">
@@ -125,13 +139,21 @@ export function ProfileSettingsForm({
 export function BusinessSettingsForm({
   defaults,
 }: {
-  defaults: BusinessValues;
+  defaults: {
+    workspaceName: string;
+    businessName: string;
+    businessType: BusinessInput["businessType"];
+    countryCode: string;
+  };
 }) {
   const [state, action] = useActionState(saveBusinessAction, initialActionState);
   const [pending, startTransition] = useTransition();
-  const form = useForm<BusinessValues>({
+  const form = useForm<BusinessInput, unknown, BusinessValues>({
     resolver: zodResolver(businessSchema),
-    defaultValues: defaults,
+    defaultValues: {
+      ...defaults,
+      businessName: defaults.businessName ?? "",
+    },
   });
   const countries = useMemo(
     () =>
@@ -150,7 +172,7 @@ export function BusinessSettingsForm({
           action(
             toFormData({
               ...values,
-              businessType: values.businessType ?? "",
+              businessName: values.businessName ?? "",
             }),
           ),
         ),
@@ -159,9 +181,11 @@ export function BusinessSettingsForm({
       <ErrorSummary
         errors={[
           form.formState.errors.workspaceName?.message,
+          form.formState.errors.businessName?.message,
           form.formState.errors.businessType?.message,
           form.formState.errors.countryCode?.message,
           state.fieldErrors?.workspaceName?.[0],
+          state.fieldErrors?.businessName?.[0],
           state.fieldErrors?.businessType?.[0],
           state.fieldErrors?.countryCode?.[0],
         ]}
@@ -177,8 +201,42 @@ export function BusinessSettingsForm({
         <Input
           id="workspaceName"
           autoComplete="organization"
-          aria-invalid={Boolean(form.formState.errors.workspaceName)}
+          aria-invalid={Boolean(
+            form.formState.errors.workspaceName ??
+              state.fieldErrors?.workspaceName,
+          )}
+          aria-describedby={
+            form.formState.errors.workspaceName ??
+            state.fieldErrors?.workspaceName
+              ? "workspaceName-error"
+              : undefined
+          }
           {...form.register("workspaceName")}
+        />
+      </FormField>
+      <FormField
+        id="businessName"
+        label="Business name (optional)"
+        description="This customer-facing name is separate from the internal workspace name. Clear it to remove it."
+        error={
+          form.formState.errors.businessName?.message ??
+          state.fieldErrors?.businessName?.[0]
+        }
+      >
+        <Input
+          id="businessName"
+          autoComplete="organization"
+          aria-invalid={Boolean(
+            form.formState.errors.businessName ??
+              state.fieldErrors?.businessName,
+          )}
+          aria-describedby={
+            form.formState.errors.businessName ??
+            state.fieldErrors?.businessName
+              ? "businessName-description businessName-error"
+              : "businessName-description"
+          }
+          {...form.register("businessName")}
         />
       </FormField>
       <FormField
@@ -189,8 +247,21 @@ export function BusinessSettingsForm({
           state.fieldErrors?.businessType?.[0]
         }
       >
-        <Select id="businessType" {...form.register("businessType")}>
-          <option value="">Not specified</option>
+        <Select
+          id="businessType"
+          aria-invalid={Boolean(
+            form.formState.errors.businessType ??
+              state.fieldErrors?.businessType,
+          )}
+          aria-describedby={
+            form.formState.errors.businessType ??
+            state.fieldErrors?.businessType
+              ? "businessType-error"
+              : undefined
+          }
+          {...form.register("businessType")}
+        >
+          <option value="">Choose a business type</option>
           {BUSINESS_TYPES.map((type) => (
             <option key={type} value={type}>
               {type}
@@ -208,7 +279,14 @@ export function BusinessSettingsForm({
       >
         <Select
           id="countryCode"
-          aria-invalid={Boolean(form.formState.errors.countryCode)}
+          aria-invalid={Boolean(
+            form.formState.errors.countryCode ?? state.fieldErrors?.countryCode,
+          )}
+          aria-describedby={
+            form.formState.errors.countryCode ?? state.fieldErrors?.countryCode
+              ? "countryCode-error"
+              : undefined
+          }
           {...form.register("countryCode")}
         >
           {countries.map((country) => (
@@ -293,7 +371,20 @@ export function PreferencesSettingsForm({
             state.fieldErrors?.defaultCurrency?.[0]
           }
         >
-          <Select id="defaultCurrency" {...form.register("defaultCurrency")}>
+          <Select
+            id="defaultCurrency"
+            aria-invalid={Boolean(
+              form.formState.errors.defaultCurrency ??
+                state.fieldErrors?.defaultCurrency,
+            )}
+            aria-describedby={
+              form.formState.errors.defaultCurrency ??
+              state.fieldErrors?.defaultCurrency
+                ? "defaultCurrency-error"
+                : undefined
+            }
+            {...form.register("defaultCurrency")}
+          >
             {currencies.map((currency) => (
               <option key={currency} value={currency}>
                 {currency}
@@ -309,7 +400,18 @@ export function PreferencesSettingsForm({
             state.fieldErrors?.locale?.[0]
           }
         >
-          <Select id="locale" {...form.register("locale")}>
+          <Select
+            id="locale"
+            aria-invalid={Boolean(
+              form.formState.errors.locale ?? state.fieldErrors?.locale,
+            )}
+            aria-describedby={
+              form.formState.errors.locale ?? state.fieldErrors?.locale
+                ? "locale-error"
+                : undefined
+            }
+            {...form.register("locale")}
+          >
             {Array.from(new Set([defaults.locale, ...LOCALES])).map((locale) => (
               <option key={locale} value={locale}>
                 {localeName(locale)} ({locale})
@@ -326,7 +428,18 @@ export function PreferencesSettingsForm({
           state.fieldErrors?.timeZone?.[0]
         }
       >
-        <Select id="timeZone" {...form.register("timeZone")}>
+        <Select
+          id="timeZone"
+          aria-invalid={Boolean(
+            form.formState.errors.timeZone ?? state.fieldErrors?.timeZone,
+          )}
+          aria-describedby={
+            form.formState.errors.timeZone ?? state.fieldErrors?.timeZone
+              ? "timeZone-error"
+              : undefined
+          }
+          {...form.register("timeZone")}
+        >
           {Array.from(new Set([defaults.timeZone, ...timeZones])).map((zone) => (
             <option key={zone} value={zone}>
               {zone.replaceAll("_", " ")}
@@ -339,7 +452,20 @@ export function PreferencesSettingsForm({
         label="Color theme"
         description="Your theme preference belongs to your user profile, not the shared workspace."
       >
-        <Select id="themePreference" {...form.register("themePreference")}>
+        <Select
+          id="themePreference"
+          aria-invalid={Boolean(
+            form.formState.errors.themePreference ??
+              state.fieldErrors?.themePreference,
+          )}
+          aria-describedby={
+            form.formState.errors.themePreference ??
+            state.fieldErrors?.themePreference
+              ? "themePreference-description themePreference-error"
+              : "themePreference-description"
+          }
+          {...form.register("themePreference")}
+        >
           <option value="system">Match device</option>
           <option value="light">Light</option>
           <option value="dark">Dark</option>

@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
 import {
   useActionState,
   useEffect,
@@ -19,27 +20,39 @@ import { initialActionState } from "@/lib/actions/state";
 import {
   BUSINESS_TYPES,
   COUNTRY_CODES,
+  EXPERIENCE_LEVELS,
   FALLBACK_CURRENCIES,
   FALLBACK_TIME_ZONES,
   LOCALES,
+  PRIMARY_CATEGORIES,
+  SELLING_CHANNELS,
 } from "@/lib/constants/international";
 import { countryName, localeName } from "@/lib/formatting/international";
 import {
   onboardingSchema,
+  type OnboardingInput,
   type OnboardingValues,
 } from "@/lib/validation/account";
 import { completeOnboardingAction } from "./actions";
+import { toOnboardingFormData } from "./onboarding-payload";
 
 const stepFields: Array<Array<keyof OnboardingValues>> = [
-  ["displayName", "workspaceName"],
-  ["businessType", "countryCode"],
-  ["defaultCurrency", "locale", "timeZone"],
+  ["firstName", "lastName", "businessName"],
+  ["businessType", "primaryCategory", "experienceLevel"],
+  ["countryCode", "defaultCurrency", "sellingMarkets", "sellingChannels"],
+  ["locale", "timeZone", "acceptedTerms"],
 ];
 
 export function OnboardingForm({
-  initialDisplayName,
+  initialFirstName,
+  initialLastName,
+  initialBusinessName,
+  initialAcceptedTerms,
 }: {
-  initialDisplayName: string;
+  initialFirstName: string;
+  initialLastName: string;
+  initialBusinessName: string;
+  initialAcceptedTerms: boolean;
 }) {
   const [step, setStep] = useState(0);
   const [state, action] = useActionState(
@@ -47,17 +60,23 @@ export function OnboardingForm({
     initialActionState,
   );
   const [pending, startTransition] = useTransition();
-  const form = useForm<OnboardingValues>({
+  const form = useForm<OnboardingInput, unknown, OnboardingValues>({
     resolver: zodResolver(onboardingSchema),
     mode: "onTouched",
     defaultValues: {
-      displayName: initialDisplayName,
-      workspaceName: "",
+      firstName: initialFirstName,
+      lastName: initialLastName,
+      businessName: initialBusinessName,
       businessType: "",
+      primaryCategory: "",
       countryCode: "",
       defaultCurrency: "",
+      sellingMarkets: [],
+      experienceLevel: "",
+      sellingChannels: [],
       locale: "",
       timeZone: "",
+      acceptedTerms: initialAcceptedTerms,
     },
   });
 
@@ -94,16 +113,16 @@ export function OnboardingForm({
   }, []);
   const selectedLocale = form.watch("locale");
   const selectedTimeZone = form.watch("timeZone");
+  const fieldError = (field: keyof OnboardingValues) =>
+    form.formState.errors[field]?.message ?? state.fieldErrors?.[field]?.[0];
 
   async function nextStep() {
     const valid = await form.trigger(stepFields[step], { shouldFocus: true });
-    if (valid) setStep((current) => Math.min(current + 1, 2));
+    if (valid) setStep((current) => Math.min(current + 1, 3));
   }
 
   function submit(values: OnboardingValues) {
-    const data = new FormData();
-    Object.entries(values).forEach(([key, value]) => data.set(key, value ?? ""));
-    startTransition(() => action(data));
+    startTransition(() => action(toOnboardingFormData(values)));
   }
 
   const allErrors = [
@@ -118,7 +137,7 @@ export function OnboardingForm({
   return (
     <div>
       <ol className="mb-9 flex items-center" aria-label="Setup progress">
-        {["Identity", "Business", "Preferences"].map((label, index) => (
+        {["Identity", "Business", "Markets", "Agreement"].map((label, index) => (
           <li
             key={label}
             className="flex flex-1 items-center last:flex-none"
@@ -133,7 +152,7 @@ export function OnboardingForm({
             >
               {step > index ? <Check className="size-4" /> : index + 1}
             </span>
-            {index < 2 ? (
+            {index < 3 ? (
               <span
                 className={`mx-2 h-px flex-1 ${
                   step > index ? "bg-[var(--accent)]" : "bg-[var(--line)]"
@@ -160,34 +179,57 @@ export function OnboardingForm({
         {step === 0 ? (
           <div className="space-y-5">
             <StepHeading
-              step="Step 1 of 3"
-              title="Start with the essentials"
-              description="This is how your name and workspace will appear throughout ResellHQ."
+              step="Step 1 of 4"
+              title="Tell us who you are"
+              description="Your name identifies your account. A business name is optional and can be added later."
             />
             <FormField
-              id="displayName"
-              label="Display name"
-              error={form.formState.errors.displayName?.message}
+              id="firstName"
+              label="First name"
+              error={fieldError("firstName")}
             >
               <Input
-                id="displayName"
-                autoComplete="name"
-                aria-invalid={Boolean(form.formState.errors.displayName)}
-                {...form.register("displayName")}
+                id="firstName"
+                autoComplete="given-name"
+                aria-invalid={Boolean(fieldError("firstName"))}
+                aria-describedby={
+                  fieldError("firstName") ? "firstName-error" : undefined
+                }
+                {...form.register("firstName")}
               />
             </FormField>
             <FormField
-              id="workspaceName"
-              label="Workspace or store name"
-              description="You can change this later."
-              error={form.formState.errors.workspaceName?.message}
+              id="lastName"
+              label="Last name"
+              error={fieldError("lastName")}
             >
               <Input
-                id="workspaceName"
+                id="lastName"
+                autoComplete="family-name"
+                aria-invalid={Boolean(fieldError("lastName"))}
+                aria-describedby={
+                  fieldError("lastName") ? "lastName-error" : undefined
+                }
+                {...form.register("lastName")}
+              />
+            </FormField>
+            <FormField
+              id="businessName"
+              label="Business name (optional)"
+              description="Leave this blank if you sell under your own name or have not chosen a business name."
+              error={fieldError("businessName")}
+            >
+              <Input
+                id="businessName"
                 autoComplete="organization"
                 placeholder="Northline Resale"
-                aria-invalid={Boolean(form.formState.errors.workspaceName)}
-                {...form.register("workspaceName")}
+                aria-invalid={Boolean(fieldError("businessName"))}
+                aria-describedby={
+                  fieldError("businessName")
+                    ? "businessName-description businessName-error"
+                    : "businessName-description"
+                }
+                {...form.register("businessName")}
               />
             </FormField>
           </div>
@@ -196,21 +238,24 @@ export function OnboardingForm({
         {step === 1 ? (
           <div className="space-y-5">
             <StepHeading
-              step="Step 2 of 3"
+              step="Step 2 of 4"
               title="Describe your operation"
-              description="Business type is optional. Country prepares appropriate regional defaults."
+              description="These details tailor the workspace to your resale business."
             />
             <FormField
               id="businessType"
               label="Business type"
-              error={form.formState.errors.businessType?.message}
+              error={fieldError("businessType")}
             >
               <Select
                 id="businessType"
-                aria-invalid={Boolean(form.formState.errors.businessType)}
+                aria-invalid={Boolean(fieldError("businessType"))}
+                aria-describedby={
+                  fieldError("businessType") ? "businessType-error" : undefined
+                }
                 {...form.register("businessType")}
               >
-                <option value="">Not specified</option>
+                <option value="">Choose a business type</option>
                 {BUSINESS_TYPES.map((type) => (
                   <option key={type} value={type}>
                     {type}
@@ -219,19 +264,47 @@ export function OnboardingForm({
               </Select>
             </FormField>
             <FormField
-              id="countryCode"
-              label="Country"
-              error={form.formState.errors.countryCode?.message}
+              id="primaryCategory"
+              label="Primary category"
+              error={fieldError("primaryCategory")}
             >
               <Select
-                id="countryCode"
-                aria-invalid={Boolean(form.formState.errors.countryCode)}
-                {...form.register("countryCode")}
+                id="primaryCategory"
+                aria-invalid={Boolean(fieldError("primaryCategory"))}
+                aria-describedby={
+                  fieldError("primaryCategory")
+                    ? "primaryCategory-error"
+                    : undefined
+                }
+                {...form.register("primaryCategory")}
               >
-                <option value="">Choose a country</option>
-                {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.name}
+                <option value="">Choose a primary category</option>
+                {PRIMARY_CATEGORIES.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </Select>
+            </FormField>
+            <FormField
+              id="experienceLevel"
+              label="Experience level"
+              error={fieldError("experienceLevel")}
+            >
+              <Select
+                id="experienceLevel"
+                aria-invalid={Boolean(fieldError("experienceLevel"))}
+                aria-describedby={
+                  fieldError("experienceLevel")
+                    ? "experienceLevel-error"
+                    : undefined
+                }
+                {...form.register("experienceLevel")}
+              >
+                <option value="">Choose your experience level</option>
+                {EXPERIENCE_LEVELS.map((level) => (
+                  <option key={level} value={level}>
+                    {level}
                   </option>
                 ))}
               </Select>
@@ -242,18 +315,44 @@ export function OnboardingForm({
         {step === 2 ? (
           <div className="space-y-5">
             <StepHeading
-              step="Step 3 of 3"
-              title="Set regional preferences"
-              description="These settings control how future records will be displayed."
+              step="Step 3 of 4"
+              title="Choose where and how you sell"
+              description="Your home country sets regional defaults. Selling markets are geographic; selling channels are the platforms or methods you use."
             />
             <FormField
+              id="countryCode"
+              label="Country"
+              error={fieldError("countryCode")}
+            >
+              <Select
+                id="countryCode"
+                aria-invalid={Boolean(fieldError("countryCode"))}
+                aria-describedby={
+                  fieldError("countryCode") ? "countryCode-error" : undefined
+                }
+                {...form.register("countryCode")}
+              >
+                <option value="">Choose a country</option>
+                {countries.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.name}
+                  </option>
+                ))}
+              </Select>
+            </FormField>
+            <FormField
               id="defaultCurrency"
-              label="Default currency"
-              error={form.formState.errors.defaultCurrency?.message}
+              label="Currency"
+              error={fieldError("defaultCurrency")}
             >
               <Select
                 id="defaultCurrency"
-                aria-invalid={Boolean(form.formState.errors.defaultCurrency)}
+                aria-invalid={Boolean(fieldError("defaultCurrency"))}
+                aria-describedby={
+                  fieldError("defaultCurrency")
+                    ? "defaultCurrency-error"
+                    : undefined
+                }
                 {...form.register("defaultCurrency")}
               >
                 <option value="">Choose a currency</option>
@@ -265,13 +364,93 @@ export function OnboardingForm({
               </Select>
             </FormField>
             <FormField
+              id="sellingMarkets"
+              label="Selling markets"
+              description="Select one or more countries where you currently sell. Hold Ctrl or Command to select several."
+              error={fieldError("sellingMarkets")}
+            >
+              <Select
+                id="sellingMarkets"
+                multiple
+                className="h-36 appearance-auto py-2"
+                aria-invalid={Boolean(fieldError("sellingMarkets"))}
+                aria-describedby={
+                  fieldError("sellingMarkets")
+                    ? "sellingMarkets-description sellingMarkets-error"
+                    : "sellingMarkets-description"
+                }
+                {...form.register("sellingMarkets")}
+              >
+                {countries.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.name}
+                  </option>
+                ))}
+              </Select>
+            </FormField>
+            <fieldset
+              aria-describedby={
+                fieldError("sellingChannels")
+                  ? "sellingChannels-description sellingChannels-error"
+                  : "sellingChannels-description"
+              }
+            >
+              <legend className="text-sm font-medium text-[var(--ink)]">
+                Selling channels
+              </legend>
+              <p
+                id="sellingChannels-description"
+                className="mt-1.5 text-xs leading-5 text-[var(--ink-muted)]"
+              >
+                Choose the platforms or selling methods you use. This is separate
+                from the geographic markets above.
+              </p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {SELLING_CHANNELS.map((channel) => (
+                  <label
+                    key={channel}
+                    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md border border-[var(--line-strong)] bg-[var(--surface)] px-3 text-sm transition hover:bg-[var(--surface-subtle)] focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--focus-soft)]"
+                  >
+                    <input
+                      type="checkbox"
+                      value={channel}
+                      className="size-4 accent-[var(--accent)]"
+                      {...form.register("sellingChannels")}
+                    />
+                    <span>{channel}</span>
+                  </label>
+                ))}
+              </div>
+              {fieldError("sellingChannels") ? (
+                <p
+                  id="sellingChannels-error"
+                  className="mt-1.5 text-xs text-[var(--danger)]"
+                >
+                  {fieldError("sellingChannels")}
+                </p>
+              ) : null}
+            </fieldset>
+          </div>
+        ) : null}
+
+        {step === 3 ? (
+          <div className="space-y-5">
+            <StepHeading
+              step="Step 4 of 4"
+              title="Set preferences and review"
+              description="Choose how ResellHQ displays regional information, then review the terms for your account."
+            />
+            <FormField
               id="locale"
               label="Preferred language and locale"
-              error={form.formState.errors.locale?.message}
+              error={fieldError("locale")}
             >
               <Select
                 id="locale"
-                aria-invalid={Boolean(form.formState.errors.locale)}
+                aria-invalid={Boolean(fieldError("locale"))}
+                aria-describedby={
+                  fieldError("locale") ? "locale-error" : undefined
+                }
                 {...form.register("locale")}
               >
                 <option value="">Choose a language</option>
@@ -287,11 +466,14 @@ export function OnboardingForm({
             <FormField
               id="timeZone"
               label="Time zone"
-              error={form.formState.errors.timeZone?.message}
+              error={fieldError("timeZone")}
             >
               <Select
                 id="timeZone"
-                aria-invalid={Boolean(form.formState.errors.timeZone)}
+                aria-invalid={Boolean(fieldError("timeZone"))}
+                aria-describedby={
+                  fieldError("timeZone") ? "timeZone-error" : undefined
+                }
                 {...form.register("timeZone")}
               >
                 <option value="">Choose a time zone</option>
@@ -304,6 +486,50 @@ export function OnboardingForm({
                   ))}
               </Select>
             </FormField>
+            <div>
+              <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-[var(--line-strong)] bg-[var(--surface)] p-3.5 text-sm leading-6 transition hover:bg-[var(--surface-subtle)] focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--focus-soft)]">
+                <input
+                  type="checkbox"
+                  className="mt-1 size-4 shrink-0 accent-[var(--accent)]"
+                  aria-invalid={Boolean(fieldError("acceptedTerms"))}
+                  aria-describedby={
+                    fieldError("acceptedTerms")
+                      ? "acceptedTerms-error"
+                      : undefined
+                  }
+                  {...form.register("acceptedTerms")}
+                />
+                <span>
+                  I have read and accept the{" "}
+                  <Link
+                    href="/terms"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-[var(--accent)] underline underline-offset-4"
+                  >
+                    Terms
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-[var(--accent)] underline underline-offset-4"
+                  >
+                    Privacy Notice
+                  </Link>
+                  .
+                </span>
+              </label>
+              {fieldError("acceptedTerms") ? (
+                <p
+                  id="acceptedTerms-error"
+                  className="mt-1.5 text-xs text-[var(--danger)]"
+                >
+                  {fieldError("acceptedTerms")}
+                </p>
+              ) : null}
+            </div>
             {state.message ? <Alert>{state.message}</Alert> : null}
           </div>
         ) : null}
@@ -318,7 +544,7 @@ export function OnboardingForm({
             <ArrowLeft className="size-4" />
             Back
           </Button>
-          {step < 2 ? (
+          {step < 3 ? (
             <Button type="button" onClick={nextStep}>
               Continue
               <ArrowRight className="size-4" />

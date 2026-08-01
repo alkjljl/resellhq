@@ -45,7 +45,9 @@ export function ResetForm() {
           required
           aria-invalid={Boolean(state.fieldErrors?.password)}
           aria-describedby={
-            state.fieldErrors?.password ? "password-error" : undefined
+            state.fieldErrors?.password
+              ? "password-error"
+              : "password-description"
           }
         />
       </FormField>

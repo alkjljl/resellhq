@@ -7,6 +7,7 @@ import { cn } from "@/lib/cn";
 const sections = [
   ["Profile", "/settings/profile"],
   ["Business", "/settings/business"],
+  ["Team members", "/settings/team"],
   ["Preferences", "/settings/preferences"],
   ["Security", "/settings/security"],
 ] as const;

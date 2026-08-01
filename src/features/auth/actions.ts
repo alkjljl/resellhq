@@ -2,9 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentAccount, isAccountComplete } from "@/lib/auth/account";
+import { getCurrentAccount } from "@/lib/auth/account";
+import { destinationAfterSignIn } from "@/lib/auth/routing";
 import { getRequestOrigin } from "@/lib/auth/request-origin";
 import type { ActionState } from "@/lib/actions/state";
+import { getSafeRedirect } from "@/lib/security/safe-redirect";
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -45,7 +47,13 @@ export async function loginAction(
   }
 
   const account = await getCurrentAccount();
-  redirect(account && isAccountComplete(account) ? "/dashboard" : "/onboarding");
+  const requestedNext = getSafeRedirect(
+    typeof formData.get("next") === "string"
+      ? (formData.get("next") as string)
+      : null,
+    "/dashboard",
+  );
+  redirect(destinationAfterSignIn(account, requestedNext));
 }
 
 export async function signupAction(
@@ -88,14 +96,20 @@ export async function signupAction(
   };
 }
 
-export async function googleOAuthAction() {
+export async function googleOAuthAction(formData: FormData) {
   const supabase = await createClient();
   const origin = await getRequestOrigin();
+  const requestedNext = getSafeRedirect(
+    typeof formData.get("next") === "string"
+      ? (formData.get("next") as string)
+      : null,
+    "/dashboard",
+  );
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
       redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(
-        "/dashboard",
+        requestedNext,
       )}`,
     },
   });

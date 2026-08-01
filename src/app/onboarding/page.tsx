@@ -23,7 +23,10 @@ export default async function OnboardingPage() {
         </div>
         <div className="mx-auto mt-8 max-w-[620px] rounded-lg border border-[var(--line)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] sm:p-10">
           <OnboardingForm
-            initialDisplayName={account.profile?.displayName ?? ""}
+            initialFirstName={account.profile?.firstName ?? ""}
+            initialLastName={account.profile?.lastName ?? ""}
+            initialBusinessName={account.profile?.businessName ?? ""}
+            initialAcceptedTerms={account.profile?.acceptedTerms === true}
           />
         </div>
       </div>

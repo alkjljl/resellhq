@@ -9,7 +9,14 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:db": "supabase test db --local",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:e2e": "playwright test --config playwright.config.mjs --project=desktop",
+    "test:e2e:responsive": "playwright test --config playwright.config.mjs --project=mobile --project=tablet --project=laptop --project=desktop-responsive",
+    "acceptance:prepare": "node scripts/acceptance/prepare-local.mjs",
+    "test:acceptance": "node scripts/acceptance/run-local.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.7",
@@ -29,12 +36,14 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@playwright/test": "1.61.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^15.5.22",
+    "supabase": "2.109.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.10"

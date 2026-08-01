@@ -12,7 +12,12 @@ function account(
     user: { id: "user-1" } as CurrentAccount["user"],
     profile: {
       displayName: "Avery",
+      firstName: "Avery",
+      lastName: "Chen",
+      businessName: null,
       themePreference: "system",
+      acceptedTerms: true,
+      completedOnboarding: "2026-07-27T10:00:00Z",
       onboardingCompleted: true,
       onboardingCompletedAt: "2026-07-27T10:00:00Z",
     },
@@ -21,6 +26,10 @@ function account(
       id: "workspace-1",
       name: "Northline Resale",
       businessType: null,
+      primaryCategory: null,
+      sellingMarkets: null,
+      experienceLevel: null,
+      sellingChannels: null,
       countryCode: "CA",
       defaultCurrency: "CAD",
       locale: "en-CA",
@@ -37,7 +46,12 @@ describe("isAccountComplete", () => {
         account({
           profile: {
             displayName: "Avery",
+            firstName: "",
+            lastName: "",
+            businessName: null,
             themePreference: "system",
+            acceptedTerms: null,
+            completedOnboarding: null,
             onboardingCompleted: false,
             onboardingCompletedAt: null,
           },
@@ -48,6 +62,35 @@ describe("isAccountComplete", () => {
 
   it("treats a true onboarding flag as complete", () => {
     expect(isAccountComplete(account())).toBe(true);
+  });
+
+  it("uses the canonical completion timestamp for new completions", () => {
+    expect(
+      isAccountComplete(
+        account({
+          profile: {
+            ...account().profile!,
+            completedOnboarding: "2026-07-31T10:00:00Z",
+            onboardingCompleted: false,
+          },
+        }),
+      ),
+    ).toBe(true);
+  });
+
+  it("keeps a legacy completed user complete without fabricating consent", () => {
+    expect(
+      isAccountComplete(
+        account({
+          profile: {
+            ...account().profile!,
+            acceptedTerms: null,
+            completedOnboarding: null,
+            onboardingCompleted: true,
+          },
+        }),
+      ),
+    ).toBe(true);
   });
 
   it("does not reclassify a completed account when workspace data is missing", () => {

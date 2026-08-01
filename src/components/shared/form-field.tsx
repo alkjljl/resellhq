@@ -18,8 +18,11 @@ export function FormField({
     <div>
       <Label htmlFor={id}>{label}</Label>
       {children}
-      {description ? (
-        <p className="mt-1.5 text-xs leading-5 text-[var(--ink-muted)]">
+      {description && description !== error ? (
+        <p
+          id={`${id}-description`}
+          className="mt-1.5 text-xs leading-5 text-[var(--ink-muted)]"
+        >
           {description}
         </p>
       ) : null}

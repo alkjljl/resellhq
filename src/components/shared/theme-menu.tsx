@@ -17,7 +17,12 @@ export function ThemeMenu() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Choose color theme">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-9 rounded-sm border border-[var(--line)]"
+          aria-label="Choose color theme"
+        >
           <Sun className="size-4 dark:hidden" aria-hidden="true" />
           <Moon className="hidden size-4 dark:block" aria-hidden="true" />
         </Button>

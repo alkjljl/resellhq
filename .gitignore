@@ -12,6 +12,9 @@ node_modules/
 
 # testing
 coverage/
+playwright-report/
+test-results/
+.phase1-test-state/
 
 # next.js
 .next/
@@ -34,8 +37,10 @@ yarn-error.log*
 # local environment files
 .env
 .env.local
+.env.test
 .env.*.local
 !.env.example
+!.env.test.example
 
 # Supabase local state
 supabase/.temp/

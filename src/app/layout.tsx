@@ -7,6 +7,8 @@ import "./globals.css";
 const title = "ResellHQ — Operate every resale";
 const description =
   "A worldwide business operating system for independent resale operators.";
+const fontStylesheet =
+  "https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&f[]=gambetta@500,600&f[]=azeret-mono@400,500&display=swap";
 
 export async function generateMetadata(): Promise<Metadata> {
   let origin = "http://localhost:3000";
@@ -53,14 +55,23 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f4f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#090a0c" },
+    { media: "(prefers-color-scheme: light)", color: "#f3f0e8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0d0a" },
   ],
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          rel="preconnect"
+          href="https://cdn.fontshare.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="stylesheet" href={fontStylesheet} />
+      </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>

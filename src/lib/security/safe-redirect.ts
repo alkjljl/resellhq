@@ -5,6 +5,7 @@ const allowedRoutes = [
   "/settings/business",
   "/settings/preferences",
   "/settings/security",
+  "/settings/team",
   "/reset-password",
 ] as const;
 

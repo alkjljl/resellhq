@@ -4,13 +4,17 @@ import { redirect } from "next/navigation";
 import type { ActionState } from "@/lib/actions/state";
 import { createClient } from "@/lib/supabase/server";
 import { onboardingSchema } from "@/lib/validation/account";
+import {
+  buildCompleteOnboardingArgs,
+  decodeOnboardingFormData,
+} from "./onboarding-payload";
 
 export async function completeOnboardingAction(
   _state: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const parsed = onboardingSchema.safeParse(
-    Object.fromEntries(formData.entries()),
+    decodeOnboardingFormData(formData),
   );
   if (!parsed.success) {
     return {
@@ -32,15 +36,10 @@ export async function completeOnboardingAction(
     };
   }
 
-  const { error } = await supabase.rpc("complete_onboarding", {
-    p_display_name: parsed.data.displayName,
-    p_workspace_name: parsed.data.workspaceName,
-    p_business_type: parsed.data.businessType || null,
-    p_country_code: parsed.data.countryCode,
-    p_default_currency: parsed.data.defaultCurrency,
-    p_locale: parsed.data.locale,
-    p_time_zone: parsed.data.timeZone,
-  });
+  const { error } = await supabase.rpc(
+    "complete_onboarding",
+    buildCompleteOnboardingArgs(parsed.data),
+  );
 
   if (error) {
     return {
