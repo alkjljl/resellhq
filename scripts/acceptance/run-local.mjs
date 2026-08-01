@@ -74,6 +74,10 @@ try {
     ...process.env,
     ...loadLocalStatus(supabase),
   };
+  run(npm, ["run", "test:integration:auth-preflight"], {
+    env: testEnvironment,
+    label: "local Supabase Auth preflight",
+  });
   run(npm, ["run", "test:integration"], {
     env: testEnvironment,
     label: "real Supabase integration tests",

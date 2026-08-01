@@ -34,6 +34,79 @@ export const validOnboardingArgs = {
   p_time_zone: "America/Toronto",
 };
 
+const AUTH_HEALTH_TIMEOUT_MS = 30_000;
+const AUTH_HEALTH_ATTEMPT_TIMEOUT_MS = 3_000;
+const AUTH_HEALTH_RETRY_MS = 250;
+
+type AuthHealthResponse = {
+  name: string;
+  version: string;
+};
+
+export function describeAuthError(error: unknown): string {
+  if (!error) {
+    return "class=MissingAuthResult; status=unavailable; code=unavailable; message=Supabase Auth returned no user";
+  }
+
+  const value = asErrorRecord(error);
+  const errorClass = safeDiagnosticToken(
+    error instanceof Error
+      ? error.constructor.name || error.name
+      : typeof value.name === "string"
+        ? value.name
+        : typeof error,
+  );
+  const status = safeDiagnosticToken(value.status);
+  const code = safeDiagnosticToken(value.code);
+  const message = sanitizeDiagnosticMessage(
+    error instanceof Error
+      ? error.message
+      : typeof value.message === "string"
+        ? value.message
+        : "No error message was provided",
+  );
+
+  return `class=${errorClass}; status=${status}; code=${code}; message=${message}`;
+}
+
+export async function waitForLocalAuthHealth(
+  environment: SupabaseTestEnvironment,
+): Promise<AuthHealthResponse> {
+  if (environment.target !== "local") {
+    throw new Error("The local Auth preflight requires an isolated loopback target.");
+  }
+
+  const endpoint = new URL("/auth/v1/health", environment.url);
+  const deadline = Date.now() + AUTH_HEALTH_TIMEOUT_MS;
+  let lastEvidence = "no response received";
+
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(endpoint, {
+        headers: { apikey: environment.publishableKey },
+        signal: AbortSignal.timeout(AUTH_HEALTH_ATTEMPT_TIMEOUT_MS),
+      });
+      if (response.ok) {
+        const body = (await response.json()) as Partial<AuthHealthResponse>;
+        if (body.name === "GoTrue" && typeof body.version === "string") {
+          return body as AuthHealthResponse;
+        }
+        lastEvidence = `HTTP ${response.status} returned an unexpected health payload`;
+      } else {
+        lastEvidence = `HTTP ${response.status}`;
+      }
+    } catch (error) {
+      lastEvidence = describeAuthError(error);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, AUTH_HEALTH_RETRY_MS));
+  }
+
+  throw new Error(
+    `Local Supabase Auth did not become healthy within ${AUTH_HEALTH_TIMEOUT_MS}ms (${lastEvidence}).`,
+  );
+}
+
 export class SupabaseFixtureManager {
   readonly environment: SupabaseTestEnvironment;
   readonly admin: SupabaseClient<Database>;
@@ -63,7 +136,9 @@ export class SupabaseFixtureManager {
       email_confirm: true,
     });
     if (error || !data.user) {
-      throw new Error(`Could not create isolated test user (${error?.code ?? "unknown"}).`);
+      throw new Error(
+        `Could not create isolated test user (${describeAuthError(error)}).`,
+      );
     }
     this.userIds.add(data.user.id);
 
@@ -75,7 +150,7 @@ export class SupabaseFixtureManager {
       await client.auth.signInWithPassword({ email, password });
     if (signInError || !signIn.user) {
       throw new Error(
-        `Could not authenticate isolated test user (${signInError?.code ?? "unknown"}).`,
+        `Could not authenticate isolated test user (${describeAuthError(signInError)}).`,
       );
     }
     return { id: data.user.id, email, password, client, user: signIn.user };
@@ -90,8 +165,21 @@ export class SupabaseFixtureManager {
       email: user.email,
       password: user.password,
     });
-    if (error) throw new Error(`Fresh test sign-in failed (${error.code}).`);
+    if (error) {
+      throw new Error(`Fresh test sign-in failed (${describeAuthError(error)}).`);
+    }
     return client;
+  }
+
+  async deleteUser(userId: string) {
+    // The environment guard is intentionally re-evaluated immediately before
+    // destructive cleanup.
+    getSupabaseTestEnvironment();
+    const { error } = await this.admin.auth.admin.deleteUser(userId);
+    if (error) {
+      throw new Error(`Auth-user cleanup failed (${describeAuthError(error)}).`);
+    }
+    this.userIds.delete(userId);
   }
 
   trackWorkspace(workspaceId: string) {
@@ -144,9 +232,41 @@ export class SupabaseFixtureManager {
     }
     for (const userId of userIds) {
       const { error } = await this.admin.auth.admin.deleteUser(userId);
-      if (error) throw new Error(`Auth-user cleanup failed (${error.code}).`);
+      if (error) {
+        throw new Error(`Auth-user cleanup failed (${describeAuthError(error)}).`);
+      }
     }
   }
+}
+
+function asErrorRecord(error: unknown): Record<string, unknown> {
+  return typeof error === "object" && error !== null
+    ? (error as Record<string, unknown>)
+    : {};
+}
+
+function safeDiagnosticToken(value: unknown): string {
+  const normalized =
+    typeof value === "number"
+      ? String(value)
+      : typeof value === "string"
+        ? value
+        : "unavailable";
+  return /^[A-Za-z0-9_.-]{1,80}$/.test(normalized)
+    ? normalized
+    : "unavailable";
+}
+
+function sanitizeDiagnosticMessage(message: string): string {
+  return message
+    .replace(/\bBearer\s+\S+/gi, "Bearer [REDACTED]")
+    .replace(/\bsb_(?:secret|publishable)_[A-Za-z0-9_-]+\b/gi, "[REDACTED_KEY]")
+    .replace(/\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g, "[REDACTED_JWT]")
+    .replace(/\b(?:postgres|postgresql):\/\/\S+/gi, "[REDACTED_DATABASE_URL]")
+    .replace(/\b(?:password|token|apikey|authorization)\s*[=:]\s*\S+/gi, "$1=[REDACTED]")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 300);
 }
 
 function createTestClient(url: string, key: string) {
