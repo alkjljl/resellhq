@@ -81,7 +81,7 @@ select col_default_is(
   'onboarding_completed defaults to false'
 );
 select col_default_is(
-  'public', 'profiles', 'theme_preference', '''system''::text'::text,
+  'public', 'profiles', 'theme_preference', 'system'::text,
   'theme_preference defaults to system'
 );
 
@@ -180,7 +180,7 @@ select col_default_is(
   'public',
   'workspace_memberships',
   'role',
-  '''owner''::text'::text,
+  'owner'::text,
   'membership role defaults to owner'
 );
 
