@@ -125,7 +125,12 @@ select ok(
       to_regprocedure('public.handle_new_user()'),
       to_regprocedure('public.set_updated_at()')
     )
-      and not ('search_path=' = any(coalesce(procedure.proconfig, array[]::text[])))
+      and not exists (
+        select 1
+        from unnest(coalesce(procedure.proconfig, array[]::text[])) as config(setting)
+        where split_part(setting, '=', 1) = 'search_path'
+          and btrim(split_part(setting, '=', 2), '"') = ''
+      )
   ),
   'security-sensitive functions pin an empty search path'
 );

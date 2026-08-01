@@ -21,33 +21,69 @@ select has_column(
   'completed_onboarding',
   'completed_onboarding exists'
 );
-select col_type_is('public', 'profiles', 'business_name', 'text');
+select col_type_is(
+  'public', 'profiles', 'business_name', 'text'::text,
+  'business_name uses text'
+);
 select col_is_null(
   'public',
   'profiles',
   'business_name',
   'business_name remains nullable'
 );
-select col_type_is('public', 'profiles', 'accepted_terms', 'boolean');
+select col_type_is(
+  'public', 'profiles', 'accepted_terms', 'boolean'::text,
+  'accepted_terms uses boolean'
+);
 select col_type_is(
   'public',
   'profiles',
   'completed_onboarding',
-  'timestamp with time zone'
+  'timestamp with time zone'::text,
+  'completed_onboarding uses timestamptz'
 );
-select col_type_is('public', 'profiles', 'id', 'uuid');
-select col_type_is('public', 'profiles', 'first_name', 'text');
-select col_type_is('public', 'profiles', 'last_name', 'text');
-select col_type_is('public', 'profiles', 'onboarding_completed', 'boolean');
-select col_type_is('public', 'profiles', 'theme_preference', 'text');
-select col_type_is('public', 'profiles', 'created_at', 'timestamp with time zone');
-select col_type_is('public', 'profiles', 'updated_at', 'timestamp with time zone');
-select col_not_null('public', 'profiles', 'onboarding_completed');
-select col_not_null('public', 'profiles', 'theme_preference');
-select col_not_null('public', 'profiles', 'created_at');
-select col_not_null('public', 'profiles', 'updated_at');
-select col_default_is('public', 'profiles', 'onboarding_completed', 'false');
-select col_default_is('public', 'profiles', 'theme_preference', '''system''::text');
+select col_type_is(
+  'public', 'profiles', 'id', 'uuid'::text, 'profile id uses uuid'
+);
+select col_type_is(
+  'public', 'profiles', 'first_name', 'text'::text, 'first_name uses text'
+);
+select col_type_is(
+  'public', 'profiles', 'last_name', 'text'::text, 'last_name uses text'
+);
+select col_type_is(
+  'public', 'profiles', 'onboarding_completed', 'boolean'::text,
+  'onboarding_completed uses boolean'
+);
+select col_type_is(
+  'public', 'profiles', 'theme_preference', 'text'::text,
+  'theme_preference uses text'
+);
+select col_type_is(
+  'public', 'profiles', 'created_at', 'timestamp with time zone'::text,
+  'profile created_at uses timestamptz'
+);
+select col_type_is(
+  'public', 'profiles', 'updated_at', 'timestamp with time zone'::text,
+  'profile updated_at uses timestamptz'
+);
+select col_not_null(
+  'public', 'profiles', 'onboarding_completed',
+  'onboarding_completed is required'
+);
+select col_not_null(
+  'public', 'profiles', 'theme_preference', 'theme_preference is required'
+);
+select col_not_null('public', 'profiles', 'created_at', 'created_at is required');
+select col_not_null('public', 'profiles', 'updated_at', 'updated_at is required');
+select col_default_is(
+  'public', 'profiles', 'onboarding_completed', 'false'::text,
+  'onboarding_completed defaults to false'
+);
+select col_default_is(
+  'public', 'profiles', 'theme_preference', '''system''::text'::text,
+  'theme_preference defaults to system'
+);
 
 select has_column(
   'public',
@@ -73,38 +109,79 @@ select has_column(
   'selling_channels',
   'selling_channels exists'
 );
-select col_type_is('public', 'workspaces', 'selling_markets', 'text[]');
-select col_type_is('public', 'workspaces', 'selling_channels', 'text[]');
-select col_type_is('public', 'workspaces', 'id', 'uuid');
-select col_type_is('public', 'workspaces', 'name', 'text');
-select col_type_is('public', 'workspaces', 'country_code', 'text');
-select col_type_is('public', 'workspaces', 'default_currency', 'text');
-select col_type_is('public', 'workspaces', 'locale', 'text');
-select col_type_is('public', 'workspaces', 'time_zone', 'text');
-select col_not_null('public', 'workspaces', 'name');
-select col_not_null('public', 'workspaces', 'country_code');
-select col_not_null('public', 'workspaces', 'default_currency');
-select col_not_null('public', 'workspaces', 'locale');
-select col_not_null('public', 'workspaces', 'time_zone');
-select col_has_default('public', 'workspaces', 'id');
+select col_type_is(
+  'public', 'workspaces', 'selling_markets', 'text[]'::text,
+  'selling_markets uses text[]'
+);
+select col_type_is(
+  'public', 'workspaces', 'selling_channels', 'text[]'::text,
+  'selling_channels uses text[]'
+);
+select col_type_is(
+  'public', 'workspaces', 'id', 'uuid'::text, 'workspace id uses uuid'
+);
+select col_type_is(
+  'public', 'workspaces', 'name', 'text'::text, 'workspace name uses text'
+);
+select col_type_is(
+  'public', 'workspaces', 'country_code', 'text'::text, 'country_code uses text'
+);
+select col_type_is(
+  'public', 'workspaces', 'default_currency', 'text'::text,
+  'default_currency uses text'
+);
+select col_type_is(
+  'public', 'workspaces', 'locale', 'text'::text, 'locale uses text'
+);
+select col_type_is(
+  'public', 'workspaces', 'time_zone', 'text'::text, 'time_zone uses text'
+);
+select col_not_null('public', 'workspaces', 'name', 'workspace name is required');
+select col_not_null(
+  'public', 'workspaces', 'country_code', 'country_code is required'
+);
+select col_not_null(
+  'public', 'workspaces', 'default_currency', 'default_currency is required'
+);
+select col_not_null('public', 'workspaces', 'locale', 'locale is required');
+select col_not_null('public', 'workspaces', 'time_zone', 'time_zone is required');
+select col_has_default('public', 'workspaces', 'id', 'workspace id has a default');
 
-select col_type_is('public', 'workspace_memberships', 'workspace_id', 'uuid');
-select col_type_is('public', 'workspace_memberships', 'user_id', 'uuid');
-select col_type_is('public', 'workspace_memberships', 'role', 'text');
+select col_type_is(
+  'public', 'workspace_memberships', 'workspace_id', 'uuid'::text,
+  'membership workspace_id uses uuid'
+);
+select col_type_is(
+  'public', 'workspace_memberships', 'user_id', 'uuid'::text,
+  'membership user_id uses uuid'
+);
+select col_type_is(
+  'public', 'workspace_memberships', 'role', 'text'::text,
+  'membership role uses text'
+);
 select col_type_is(
   'public',
   'workspace_memberships',
   'created_at',
-  'timestamp with time zone'
+  'timestamp with time zone'::text,
+  'membership created_at uses timestamptz'
 );
-select col_not_null('public', 'workspace_memberships', 'workspace_id');
-select col_not_null('public', 'workspace_memberships', 'user_id');
-select col_not_null('public', 'workspace_memberships', 'role');
+select col_not_null(
+  'public', 'workspace_memberships', 'workspace_id',
+  'membership workspace_id is required'
+);
+select col_not_null(
+  'public', 'workspace_memberships', 'user_id', 'membership user_id is required'
+);
+select col_not_null(
+  'public', 'workspace_memberships', 'role', 'membership role is required'
+);
 select col_default_is(
   'public',
   'workspace_memberships',
   'role',
-  '''owner''::text'
+  '''owner''::text'::text,
+  'membership role defaults to owner'
 );
 
 select has_pk('public', 'profiles', 'profiles has a primary key');
@@ -215,7 +292,7 @@ select ok(
 );
 select is(
   (
-    select procedure.pronargdefaults
+    select procedure.pronargdefaults::integer
     from pg_catalog.pg_proc procedure
     where procedure.oid = to_regprocedure(
       'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'

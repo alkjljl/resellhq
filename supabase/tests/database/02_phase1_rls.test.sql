@@ -67,14 +67,14 @@ select lives_ok(
     where id = '20000000-0000-4000-8000-000000000002'$$,
   'cross-user profile UPDATE is a safe no-op'
 );
-select throws_like(
+select throws_ok(
   $$insert into public.profiles (id) values ('20000000-0000-4000-8000-000000000002')$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table profiles',
   'User A cannot INSERT a profile for User B'
 );
-select throws_like(
+select throws_ok(
   $$delete from public.profiles where id = '20000000-0000-4000-8000-000000000002'$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table profiles',
   'User A cannot DELETE User B profile'
 );
 
@@ -88,17 +88,17 @@ select lives_ok(
     where id = 'b0000000-0000-4000-8000-000000000002'$$,
   'cross-workspace UPDATE is a safe no-op'
 );
-select throws_like(
+select throws_ok(
   $$insert into public.workspaces
     (name, country_code, default_currency, locale, time_zone)
     values ('Unauthorized', 'DE', 'EUR', 'de-DE', 'Europe/Berlin')$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspaces',
   'User A cannot INSERT a workspace directly'
 );
-select throws_like(
+select throws_ok(
   $$delete from public.workspaces
     where id = 'b0000000-0000-4000-8000-000000000002'$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspaces',
   'User A cannot DELETE Workspace B'
 );
 
@@ -109,25 +109,25 @@ select results_eq(
     ('30000000-0000-4000-8000-000000000003'::uuid)$$,
   'User A can read memberships in their workspace only'
 );
-select throws_like(
+select throws_ok(
   $$insert into public.workspace_memberships (workspace_id, user_id, role)
     values ('b0000000-0000-4000-8000-000000000002',
       '10000000-0000-4000-8000-000000000001', 'owner')$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspace_memberships',
   'User A cannot move themselves into Workspace B'
 );
-select throws_like(
+select throws_ok(
   $$update public.workspace_memberships
     set user_id = '20000000-0000-4000-8000-000000000002'
     where workspace_id = 'a0000000-0000-4000-8000-000000000001'
       and user_id = '10000000-0000-4000-8000-000000000001'$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspace_memberships',
   'User A cannot replace their membership user id'
 );
-select throws_like(
+select throws_ok(
   $$delete from public.workspace_memberships
     where workspace_id = 'b0000000-0000-4000-8000-000000000002'$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspace_memberships',
   'User A cannot DELETE Workspace B memberships'
 );
 
@@ -202,34 +202,34 @@ select lives_ok(
 
 reset role;
 set local role anon;
-select throws_like(
+select throws_ok(
   $$select * from public.profiles$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table profiles',
   'anon cannot read profiles'
 );
-select throws_like(
+select throws_ok(
   $$select * from public.workspaces$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspaces',
   'anon cannot read workspaces'
 );
-select throws_like(
+select throws_ok(
   $$select * from public.workspace_memberships$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for table workspace_memberships',
   'anon cannot read memberships'
 );
-select throws_like(
+select throws_ok(
   $$select public.complete_onboarding(
     'Anon', 'User', 'Independent reseller', 'Other', 'DE', 'EUR',
     array['DE'], 'Just starting', array['eBay'], true, 'de-DE', 'Europe/Berlin', null
   )$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for function complete_onboarding',
   'anon cannot execute privileged onboarding RPC'
 );
-select throws_like(
+select throws_ok(
   $$select public.update_business_settings(
     'Workspace', null, 'Independent reseller', 'DE'
   )$$,
-  '42501', '%permission denied%',
+  '42501', 'permission denied for function update_business_settings',
   'anon cannot execute privileged business-settings RPC'
 );
 
