@@ -2,6 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createSupabaseQueryError } from "@/lib/supabase/query-error";
 import type { CurrentAccount } from "@/lib/auth/account-state";
 export { isAccountComplete } from "@/lib/auth/account-state";
 
@@ -22,7 +23,12 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profileError) throw new Error("Unable to load the account profile.");
+  if (profileError) {
+    throw createSupabaseQueryError(
+      "Unable to load the account profile",
+      profileError,
+    );
+  }
 
   const { data: membership, error: membershipError } = await supabase
     .from("workspace_memberships")
@@ -32,7 +38,10 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
     .maybeSingle();
 
   if (membershipError) {
-    throw new Error("Unable to load the workspace membership.");
+    throw createSupabaseQueryError(
+      "Unable to load the workspace membership",
+      membershipError,
+    );
   }
 
   let workspace: CurrentAccount["workspace"] = null;
@@ -45,7 +54,9 @@ export const getCurrentAccount = cache(async (): Promise<CurrentAccount | null> 
       .eq("id", membership.workspace_id)
       .maybeSingle();
 
-    if (error) throw new Error("Unable to load the workspace.");
+    if (error) {
+      throw createSupabaseQueryError("Unable to load the workspace", error);
+    }
     if (data) {
       workspace = {
         id: data.id,

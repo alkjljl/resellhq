@@ -127,7 +127,7 @@ export type Database = {
           p_selling_markets: string[];
           p_experience_level: string;
           p_selling_channels: string[];
-          p_accepted_terms: boolean;
+          p_accepted_terms: true;
           p_locale: string;
           p_time_zone: string;
         };

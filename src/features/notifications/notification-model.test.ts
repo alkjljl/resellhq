@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  activityTabFromKey,
   activityPreferencesStorageKey,
   countNotifications,
   DEFAULT_ACTIVITY_PREFERENCES,
@@ -56,6 +57,14 @@ const fixtures: ResellNotification[] = [
 ];
 
 describe("notification panel interactions", () => {
+  it("moves through Activity tabs with standard keyboard controls", () => {
+    expect(activityTabFromKey("all", "ArrowRight")).toBe("new");
+    expect(activityTabFromKey("all", "ArrowLeft")).toBe("updates");
+    expect(activityTabFromKey("tasks", "Home")).toBe("all");
+    expect(activityTabFromKey("tasks", "End")).toBe("updates");
+    expect(activityTabFromKey("tasks", "Escape")).toBeNull();
+  });
+
   it("toggles open and closed from the bell", () => {
     expect(nextPanelOpenState(false, "toggle")).toBe(true);
     expect(nextPanelOpenState(true, "toggle")).toBe(false);

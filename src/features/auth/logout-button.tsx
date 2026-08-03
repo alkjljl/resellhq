@@ -51,7 +51,7 @@ export function LogoutButton({
         >
           <button
             type="button"
-            className="flex min-h-10 w-full items-center gap-3 rounded-md px-3 text-sm text-[var(--danger)] outline-none hover:bg-[var(--danger-soft)] focus:bg-[var(--danger-soft)] focus-visible:ring-2 focus-visible:ring-[var(--focus)] disabled:pointer-events-none disabled:opacity-55"
+            className="flex min-h-11 w-full items-center gap-3 rounded-md px-3 text-sm text-[var(--danger)] outline-none hover:bg-[var(--danger-soft)] focus:bg-[var(--danger-soft)] focus-visible:ring-2 focus-visible:ring-[var(--focus)] disabled:pointer-events-none disabled:opacity-55"
           >
             <LogOut className="size-4" />
             {label}

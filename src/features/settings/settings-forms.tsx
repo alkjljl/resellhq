@@ -451,6 +451,10 @@ export function PreferencesSettingsForm({
         id="themePreference"
         label="Color theme"
         description="Your theme preference belongs to your user profile, not the shared workspace."
+        error={
+          form.formState.errors.themePreference?.message ??
+          state.fieldErrors?.themePreference?.[0]
+        }
       >
         <Select
           id="themePreference"

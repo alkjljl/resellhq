@@ -29,7 +29,7 @@ export const validOnboardingArgs = {
   p_selling_markets: ["CA", "US"],
   p_experience_level: "1-3 years",
   p_selling_channels: ["eBay", "Vinted"],
-  p_accepted_terms: true,
+  p_accepted_terms: true as const,
   p_locale: "en-CA",
   p_time_zone: "America/Toronto",
 };

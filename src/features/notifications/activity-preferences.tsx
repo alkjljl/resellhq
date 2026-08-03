@@ -114,7 +114,7 @@ export function ActivityPreferencesSection({ userId }: { userId: string }) {
                 aria-checked={preferences.showUnreadFirst}
                 aria-labelledby="activityUnreadFirstLabel"
                 className={cn(
-                  "relative h-7 w-12 rounded-full border outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)]",
+                  "relative h-11 w-12 rounded-full border outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)]",
                   preferences.showUnreadFirst
                     ? "border-[var(--accent-line)] bg-[var(--accent)]"
                     : "border-[var(--line-strong)] bg-[var(--surface)]",

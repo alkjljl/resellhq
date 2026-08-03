@@ -220,7 +220,7 @@ select throws_ok(
 select throws_ok(
   $$select public.complete_onboarding(
     'Anon', 'User', 'Independent reseller', 'Other', 'DE', 'EUR',
-    array['DE'], 'Just starting', array['eBay'], true, 'de-DE', 'Europe/Berlin', null
+    array['DE'], 'Just starting', array['eBay'], to_jsonb(true), 'de-DE', 'Europe/Berlin', null
   )$$,
   '42501', 'permission denied for function complete_onboarding',
   'anon cannot execute privileged onboarding RPC'

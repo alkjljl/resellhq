@@ -20,7 +20,7 @@ export function ThemeMenu() {
         <Button
           variant="ghost"
           size="icon"
-          className="size-9 rounded-sm border border-[var(--line)]"
+          className="size-11 rounded-sm border border-[var(--line)]"
           aria-label="Choose color theme"
         >
           <Sun className="size-4 dark:hidden" aria-hidden="true" />
@@ -39,7 +39,7 @@ export function ThemeMenu() {
               <DropdownMenu.Item
                 key={item.value}
                 onSelect={() => setTheme(item.value)}
-                className="flex cursor-default items-center gap-2 rounded-sm px-2.5 py-2 text-sm outline-none focus:bg-[var(--surface-subtle)]"
+                className="flex min-h-11 cursor-default items-center gap-2 rounded-sm px-2.5 py-2 text-sm outline-none focus:bg-[var(--surface-subtle)]"
               >
                 <Icon className="size-4 text-[var(--ink-muted)]" />
                 <span className="flex-1">{item.label}</span>

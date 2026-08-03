@@ -16,6 +16,7 @@ import { ThemeMenu } from "@/components/shared/theme-menu";
 import { buttonVariants } from "@/components/ui/button";
 import { getCurrentAccount } from "@/lib/auth/account";
 import { resolveRootDestination } from "@/lib/auth/routing";
+import { cn } from "@/lib/cn";
 
 const workflow = [
   ["Source", "Record what you bought and the true acquisition cost.", "Upcoming"],
@@ -66,7 +67,10 @@ export default async function MarketingPage() {
             <ThemeMenu />
             <Link
               href="/login"
-              className={`${buttonVariants({ variant: "ghost", size: "sm" })} hidden sm:inline-flex`}
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "sm" }),
+                "hidden sm:inline-flex",
+              )}
             >
               Log in
             </Link>
@@ -138,7 +142,7 @@ export default async function MarketingPage() {
                           {item}
                         </div>
                       ))}
-                      <p className="mt-5 px-2 text-[9px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
+                      <p className="mt-5 px-2 text-[10px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
                         Upcoming
                       </p>
                       {["Inventory", "Listings", "Sales"].map((item) => (

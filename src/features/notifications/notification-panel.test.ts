@@ -56,6 +56,9 @@ describe("Activity panel", () => {
     expect(markup).toContain('aria-label="Activity, no unread items"');
     expect(markup).toContain(">Activity<");
     expect(markup).toContain('aria-label="Activity filters"');
+    expect(markup).toMatch(/role="tab"[^>]*tabindex="0"/);
+    expect(markup).toMatch(/role="tab"[^>]*tabindex="-1"/);
+    expect(markup).toMatch(/role="tabpanel"[^>]*aria-labelledby=/);
     expect(markup).toContain(">All<");
     expect(markup).toContain(">New<");
     expect(markup).toContain(">Tasks<");

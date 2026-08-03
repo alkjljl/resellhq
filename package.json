@@ -16,6 +16,7 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test --config playwright.config.mjs --project=desktop",
     "test:e2e:responsive": "playwright test --config playwright.config.mjs --project=mobile --project=tablet --project=laptop --project=desktop-responsive",
+    "check:migrations:linked": "node scripts/check-linked-migration-parity.mjs",
     "acceptance:prepare": "node scripts/acceptance/prepare-local.mjs",
     "test:acceptance": "node scripts/acceptance/run-local.mjs"
   },

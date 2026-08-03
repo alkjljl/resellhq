@@ -67,7 +67,10 @@ export function buildCompleteOnboardingArgs(
     p_selling_markets: values.sellingMarkets,
     p_experience_level: values.experienceLevel,
     p_selling_channels: values.sellingChannels,
-    p_accepted_terms: values.acceptedTerms,
+    // The validated form can reach this builder only after exact consent.
+    // Keeping the RPC contract literal prevents ordinary booleans from being
+    // treated as proof of agreement by future callers.
+    p_accepted_terms: true,
     p_locale: values.locale,
     p_time_zone: values.timeZone,
   };

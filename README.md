@@ -9,7 +9,7 @@ resale business operating system.
 - Marketing homepage
 - Email/password and Google authentication through Supabase
 - Email confirmation, OAuth callback, password recovery, and logout
-- Three-step international onboarding
+- Four-step international onboarding
 - User profiles, business workspaces, and owner memberships
 - Server-protected application routes
 - Responsive desktop, tablet, and mobile application shell
@@ -39,11 +39,13 @@ Migration history is forward-only:
 
 1. `202607250001_create_profiles.sql`
 2. `202607270001_phase1_foundation.sql`
+3. `202607310001_authoritative_onboarding_contract.sql`
+4. `202608020001_harden_onboarding_consent.sql`
 
-The second migration preserves the earlier profile table, adds the canonical
-workspace ownership model, tightens column privileges, enables RLS on every
-private Phase 1 table, and introduces atomic onboarding and preference
-functions.
+The migrations preserve the original profile table, add the canonical
+workspace ownership model, align the onboarding and settings contracts, enforce
+exact boolean consent at the RPC boundary, tighten column privileges, and keep
+RLS enabled on every private Phase 1 table.
 
 Apply only migrations that are not already recorded for the existing Supabase
 project. Do not edit or re-run an applied migration to repair production data.
@@ -55,6 +57,18 @@ npm run lint
 npm run typecheck
 npm test
 npm run build
+npm run check:migrations:linked
+```
+
+`check:migrations:linked` compares the migration files in this repository with
+the linked project's recorded migration history. Run it before deployment so
+application database contracts cannot move ahead of the deployed schema.
+
+The full isolated acceptance suite requires Docker-compatible local containers
+and Chromium:
+
+```text
+npm run test:acceptance
 ```
 
 ## Required Supabase dashboard review

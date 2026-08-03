@@ -7,8 +7,10 @@ import {
   useActionState,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useTransition,
+  type Ref,
 } from "react";
 import { useForm } from "react-hook-form";
 import { Alert } from "@/components/ui/alert";
@@ -43,6 +45,13 @@ const stepFields: Array<Array<keyof OnboardingValues>> = [
   ["locale", "timeZone", "acceptedTerms"],
 ];
 
+const stepTitles = [
+  "Tell us who you are",
+  "Describe your operation",
+  "Choose where and how you sell",
+  "Set preferences and review",
+] as const;
+
 export function OnboardingForm({
   initialFirstName,
   initialLastName,
@@ -55,6 +64,8 @@ export function OnboardingForm({
   initialAcceptedTerms: boolean;
 }) {
   const [step, setStep] = useState(0);
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const previousStep = useRef(step);
   const [state, action] = useActionState(
     completeOnboardingAction,
     initialActionState,
@@ -89,6 +100,12 @@ export function OnboardingForm({
       form.setValue("timeZone", detectedZone, { shouldValidate: false });
     }
   }, [form]);
+
+  useEffect(() => {
+    if (previousStep.current === step) return;
+    previousStep.current = step;
+    stepHeadingRef.current?.focus();
+  }, [step]);
 
   const countries = useMemo(
     () =>
@@ -164,6 +181,10 @@ export function OnboardingForm({
         ))}
       </ol>
 
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        Step {step + 1} of 4: {stepTitles[step]}
+      </p>
+
       <form onSubmit={form.handleSubmit(submit)} noValidate>
         {allErrors.length > 0 ? (
           <Alert className="mb-6">
@@ -179,6 +200,7 @@ export function OnboardingForm({
         {step === 0 ? (
           <div className="space-y-5">
             <StepHeading
+              headingRef={stepHeadingRef}
               step="Step 1 of 4"
               title="Tell us who you are"
               description="Your name identifies your account. A business name is optional and can be added later."
@@ -238,6 +260,7 @@ export function OnboardingForm({
         {step === 1 ? (
           <div className="space-y-5">
             <StepHeading
+              headingRef={stepHeadingRef}
               step="Step 2 of 4"
               title="Describe your operation"
               description="These details tailor the workspace to your resale business."
@@ -315,6 +338,7 @@ export function OnboardingForm({
         {step === 2 ? (
           <div className="space-y-5">
             <StepHeading
+              headingRef={stepHeadingRef}
               step="Step 3 of 4"
               title="Choose where and how you sell"
               description="Your home country sets regional defaults. Selling markets are geographic; selling channels are the platforms or methods you use."
@@ -436,6 +460,7 @@ export function OnboardingForm({
         {step === 3 ? (
           <div className="space-y-5">
             <StepHeading
+              headingRef={stepHeadingRef}
               step="Step 4 of 4"
               title="Set preferences and review"
               description="Choose how ResellHQ displays regional information, then review the terms for your account."
@@ -561,10 +586,12 @@ export function OnboardingForm({
 }
 
 function StepHeading({
+  headingRef,
   step,
   title,
   description,
 }: {
+  headingRef: Ref<HTMLHeadingElement>;
   step: string;
   title: string;
   description: string;
@@ -572,7 +599,11 @@ function StepHeading({
   return (
     <div>
       <p className="eyebrow">{step}</p>
-      <h1 className="mt-2 text-2xl font-semibold tracking-[-0.035em]">
+      <h1
+        ref={headingRef}
+        tabIndex={-1}
+        className="mt-2 text-2xl font-semibold tracking-[-0.035em]"
+      >
         {title}
       </h1>
       <p className="mt-2 text-sm leading-6 text-[var(--ink-muted)]">

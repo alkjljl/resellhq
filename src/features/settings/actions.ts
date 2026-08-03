@@ -39,12 +39,14 @@ export async function saveProfileAction(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data: updatedProfile, error } = await supabase
     .from("profiles")
     .update({ display_name: parsed.data.displayName })
-    .eq("id", account.user.id);
+    .eq("id", account.user.id)
+    .select("id")
+    .maybeSingle();
 
-  if (error) {
+  if (error || !updatedProfile) {
     return {
       status: "error",
       message: "Your profile could not be saved. Try again.",

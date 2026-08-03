@@ -286,7 +286,7 @@ select ok(
 
 select ok(
   to_regprocedure(
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
   ) is not null,
   'authoritative onboarding RPC exists'
 );
@@ -295,7 +295,7 @@ select is(
     select procedure.pronargdefaults::integer
     from pg_catalog.pg_proc procedure
     where procedure.oid = to_regprocedure(
-      'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+      'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
     )
   ),
   1,
@@ -309,6 +309,12 @@ select ok(
 );
 select ok(
   to_regprocedure(
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+  ) is null,
+  'coercible boolean onboarding RPC overload is absent'
+);
+select ok(
+  to_regprocedure(
     'public.update_business_settings(text,text,text,text)'
   ) is not null,
   'business-settings RPC exists'
@@ -317,7 +323,7 @@ select ok(
 select ok(
   not has_function_privilege(
     'anon',
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)',
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)',
     'EXECUTE'
   ),
   'anon cannot execute onboarding'
@@ -325,7 +331,7 @@ select ok(
 select ok(
   has_function_privilege(
     'authenticated',
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)',
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)',
     'EXECUTE'
   ),
   'authenticated can execute onboarding'
@@ -354,7 +360,7 @@ select ok(
       coalesce(procedure.proacl, acldefault('f', procedure.proowner))
     ) privilege
     where procedure.oid = to_regprocedure(
-      'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+      'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
     )
       and privilege.grantee = 0
       and privilege.privilege_type = 'EXECUTE'
@@ -366,7 +372,7 @@ select ok(
   (select procedure.prosecdef
    from pg_catalog.pg_proc procedure
    where procedure.oid = to_regprocedure(
-     'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+     'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
    )),
   'onboarding RPC is explicitly security definer'
 );
@@ -376,7 +382,7 @@ select ok(
       select array_to_string(procedure.proconfig, ',')
       from pg_catalog.pg_proc procedure
       where procedure.oid = to_regprocedure(
-        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
       )
     ), '')
   ) > 0,
@@ -384,9 +390,18 @@ select ok(
 );
 select ok(
   position('auth.uid()' in pg_get_functiondef(to_regprocedure(
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
   ))) > 0,
   'onboarding RPC derives identity from auth.uid()'
+);
+select ok(
+  position('jsonb_typeof(p_accepted_terms)' in pg_get_functiondef(to_regprocedure(
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
+  ))) > 0
+  and position('p_accepted_terms <> ''true''::jsonb' in pg_get_functiondef(to_regprocedure(
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
+  ))) > 0,
+  'onboarding RPC requires the exact JSON boolean true'
 );
 select ok(
   not exists (
@@ -395,7 +410,7 @@ select ok(
       unnest(coalesce(procedure.proargnames, array[]::text[])) argument
     where procedure.oid in (
       to_regprocedure(
-        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
       ),
       to_regprocedure('public.update_business_settings(text,text,text,text)')
     )
@@ -405,13 +420,13 @@ select ok(
 );
 select ok(
   position('public.profiles' in pg_get_functiondef(to_regprocedure(
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
   ))) > 0
   and position('public.workspaces' in pg_get_functiondef(to_regprocedure(
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
   ))) > 0
   and position('public.workspace_memberships' in pg_get_functiondef(to_regprocedure(
-    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+    'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
   ))) > 0,
   'onboarding RPC schema-qualifies protected relations'
 );

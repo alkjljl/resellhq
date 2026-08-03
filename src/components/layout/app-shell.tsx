@@ -23,7 +23,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useTheme } from "next-themes";
 import { Brand } from "@/components/shared/brand";
 import { ThemeMenu } from "@/components/shared/theme-menu";
@@ -157,7 +162,7 @@ function ThemePreferenceSync({
   const { setTheme } = useTheme();
   const lastSynced = useRef<string | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (lastSynced.current !== preference) {
       setTheme(preference);
       lastSynced.current = preference;
@@ -190,7 +195,7 @@ function Sidebar({
       >
         {navigationGroups.map((group, groupIndex) => (
           <div key={group.label} className={cn(groupIndex > 0 && "mt-4")}>
-            <p className="px-2 pb-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+            <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -204,7 +209,7 @@ function Sidebar({
                       ? pathname.startsWith("/settings")
                       : false;
                 const common = cn(
-                  "flex min-h-9 w-full items-center gap-3 rounded-[3px] px-3 text-[11px] outline-none transition-colors",
+                  "flex min-h-11 w-full items-center gap-3 rounded-[3px] px-3 text-xs outline-none transition-colors",
                   current
                     ? "bg-[var(--nav-active)] text-[var(--ink)] shadow-[inset_2px_0_var(--accent)]"
                     : "text-[var(--ink-muted)] hover:bg-[var(--surface-subtle)] hover:text-[var(--ink)]",
@@ -234,7 +239,7 @@ function Sidebar({
                     <Icon className="size-[14px]" strokeWidth={1.5} />
                     <span className="flex-1">{item.label}</span>
                     {"badge" in item ? (
-                      <span className="border border-[var(--line-strong)] px-1.5 py-0.5 text-[7px] font-semibold uppercase tracking-[0.08em] text-[var(--ink-faint)]">
+                      <span className="border border-[var(--line-strong)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--ink-faint)]">
                         {item.badge}
                       </span>
                     ) : null}
@@ -251,7 +256,7 @@ function Sidebar({
           type="button"
           disabled
           title="Help and support is not yet available"
-          className="flex min-h-8 w-full cursor-not-allowed items-center gap-3 text-[10px] text-[var(--ink-faint)] opacity-70"
+          className="flex min-h-11 w-full cursor-not-allowed items-center gap-3 text-[10px] text-[var(--ink-faint)] opacity-70"
         >
           <Headphones className="size-[14px]" strokeWidth={1.5} />
           Help &amp; support
@@ -321,8 +326,8 @@ function UserMenu({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button className="ml-0.5 flex h-9 items-center gap-2 rounded-sm px-1.5 outline-none hover:bg-[var(--surface-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]">
-          <span className="grid size-7 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface-subtle)] text-[9px] font-semibold text-[var(--accent-strong)]">
+        <button className="ml-0.5 flex h-11 items-center gap-2 rounded-sm px-1.5 outline-none hover:bg-[var(--surface-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]">
+          <span className="grid size-7 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface-subtle)] text-[10px] font-semibold text-[var(--accent-strong)]">
             {initial}
           </span>
           <span className="hidden max-w-24 truncate text-[11px] font-medium sm:block">
@@ -351,7 +356,7 @@ function UserMenu({
           <DropdownMenu.Item asChild>
             <Link
               href="/settings/profile"
-              className="flex min-h-10 items-center gap-3 rounded-sm px-3 text-sm outline-none focus:bg-[var(--surface-subtle)]"
+              className="flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm outline-none focus:bg-[var(--surface-subtle)]"
             >
               <UserRound className="size-4" /> Account settings
             </Link>

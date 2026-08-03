@@ -104,7 +104,7 @@ select ok(
     from pg_catalog.pg_proc procedure
     where procedure.oid in (
       to_regprocedure(
-        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
       ),
       to_regprocedure('public.update_business_settings(text,text,text,text)'),
       to_regprocedure('public.update_preferences(text,text,text,text)')
@@ -118,7 +118,7 @@ select ok(
     from pg_catalog.pg_proc procedure
     where procedure.oid in (
       to_regprocedure(
-        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],boolean,text,text,text)'
+        'public.complete_onboarding(text,text,text,text,text,text,text[],text,text[],jsonb,text,text,text)'
       ),
       to_regprocedure('public.update_business_settings(text,text,text,text)'),
       to_regprocedure('public.update_preferences(text,text,text,text)'),

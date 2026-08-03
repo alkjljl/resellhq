@@ -74,6 +74,26 @@ export const NOTIFICATION_TABS: ReadonlyArray<{
   { id: "updates", label: "Updates" },
 ];
 
+export function activityTabFromKey(
+  current: NotificationTab,
+  key: string,
+): NotificationTab | null {
+  const currentIndex = NOTIFICATION_TABS.findIndex(
+    (tab) => tab.id === current,
+  );
+  if (currentIndex < 0) return null;
+
+  if (key === "Home") return NOTIFICATION_TABS[0].id;
+  if (key === "End") return NOTIFICATION_TABS.at(-1)?.id ?? null;
+  if (key !== "ArrowLeft" && key !== "ArrowRight") return null;
+
+  const offset = key === "ArrowRight" ? 1 : -1;
+  const nextIndex =
+    (currentIndex + offset + NOTIFICATION_TABS.length) %
+    NOTIFICATION_TABS.length;
+  return NOTIFICATION_TABS[nextIndex].id;
+}
+
 export function nextPanelOpenState(open: boolean, event: PanelEvent) {
   return event === "toggle" ? !open : false;
 }

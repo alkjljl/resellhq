@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentAccount } from "@/lib/auth/account";
 import { destinationAfterSignIn } from "@/lib/auth/routing";
 import { getRequestOrigin } from "@/lib/auth/request-origin";
+import { hasRecoveryAssurance } from "@/lib/auth/recovery-assurance";
 import type { ActionState } from "@/lib/actions/state";
 import { getSafeRedirect } from "@/lib/security/safe-redirect";
 import {
@@ -170,6 +171,15 @@ export async function resetPasswordAction(
   }
 
   const supabase = await createClient();
+  const { data: claimsData, error: claimsError } =
+    await supabase.auth.getClaims();
+  if (claimsError || !hasRecoveryAssurance(claimsData?.claims)) {
+    return {
+      status: "error",
+      message: "This reset session has expired. Request a new link.",
+    };
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();

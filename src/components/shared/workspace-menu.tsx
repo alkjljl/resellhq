@@ -146,7 +146,7 @@ export function WorkspaceMenu({
           <DropdownMenu.Item
             disabled
             title="Multiple workspaces are planned and not yet available"
-            className="flex min-h-10 items-center gap-2 rounded-md px-1 text-sm font-medium outline-none data-[disabled]:cursor-not-allowed"
+            className="flex min-h-11 items-center gap-2 rounded-md px-1 text-sm font-medium outline-none data-[disabled]:cursor-not-allowed"
           >
             <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
             Create Workspace
@@ -156,7 +156,7 @@ export function WorkspaceMenu({
             <Link
               href="/settings/business"
               onClick={onNavigate}
-              className="flex min-h-10 items-center gap-2 rounded-md px-1 text-sm font-medium outline-none transition-colors focus:bg-[var(--surface-subtle)]"
+              className="flex min-h-11 items-center gap-2 rounded-md px-1 text-sm font-medium outline-none transition-colors focus:bg-[var(--surface-subtle)]"
             >
               <Settings
                 className="size-4"

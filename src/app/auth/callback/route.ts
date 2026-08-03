@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentAccount, isAccountComplete } from "@/lib/auth/account";
 import { isEmailOtpType } from "@/lib/auth/otp";
+import { hasRecoveryAssurance } from "@/lib/auth/recovery-assurance";
 import { getSafeRedirect } from "@/lib/security/safe-redirect";
 
 export async function GET(request: Request) {
@@ -32,6 +33,12 @@ export async function GET(request: Request) {
   }
 
   if (requestedNext === "/reset-password") {
+    const { data, error } = await supabase.auth.getClaims();
+    if (error || !hasRecoveryAssurance(data?.claims)) {
+      return NextResponse.redirect(
+        new URL("/login?error=callback_failed", url),
+      );
+    }
     return NextResponse.redirect(new URL("/reset-password", url));
   }
 

@@ -29,6 +29,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 import {
   ACTIVITY_PREFERENCES_CHANGED_EVENT,
+  activityTabFromKey,
   activityPreferencesStorageKey,
   countNotifications,
   DEFAULT_ACTIVITY_PREFERENCES,
@@ -148,6 +149,7 @@ export function NotificationPanel({
   const [announcement, setAnnouncement] = useState("");
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLElement>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const panelId = useId();
   const titleId = `${panelId}-title`;
   const descriptionId = `${panelId}-description`;
@@ -292,7 +294,7 @@ export function NotificationPanel({
         variant="ghost"
         size="icon"
         className={cn(
-          "relative size-9 rounded-sm border border-[var(--line)]",
+          "relative size-11 rounded-sm border border-[var(--line)]",
           open && "bg-[var(--surface-subtle)] ring-2 ring-[var(--focus-soft)]",
         )}
         aria-label={
@@ -356,7 +358,7 @@ export function NotificationPanel({
               <Button
                 variant="ghost"
                 size="sm"
-                className="min-h-10 shrink-0 rounded-lg px-2.5 text-[11px] text-[var(--accent-strong)]"
+                className="min-h-11 shrink-0 rounded-lg px-2.5 text-xs text-[var(--accent-strong)]"
                 disabled={counts.unread === 0}
                 onClick={markAllRead}
               >
@@ -380,26 +382,48 @@ export function NotificationPanel({
                         ? counts.tasks
                         : counts.updates;
                 const active = activeTab === tab.id;
+                const tabIndex = NOTIFICATION_TABS.findIndex(
+                  (candidate) => candidate.id === tab.id,
+                );
 
                 return (
                   <button
                     key={tab.id}
+                    ref={(element) => {
+                      tabRefs.current[tabIndex] = element;
+                    }}
                     type="button"
                     role="tab"
+                    id={`${panelId}-tab-${tab.id}`}
                     aria-selected={active}
                     aria-controls={`${panelId}-tabpanel`}
+                    tabIndex={active ? 0 : -1}
                     className={cn(
-                      "flex min-h-10 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+                      "flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                       active
                         ? "bg-[var(--accent)] text-[var(--accent-ink)]"
                         : "text-[var(--ink-muted)] hover:bg-[var(--surface-subtle)] hover:text-[var(--ink)]",
                     )}
                     onClick={() => setActiveTab(tab.id)}
+                    onKeyDown={(event) => {
+                      const nextTab = activityTabFromKey(
+                        activeTab,
+                        event.key,
+                      );
+                      if (!nextTab) return;
+
+                      event.preventDefault();
+                      setActiveTab(nextTab);
+                      const nextIndex = NOTIFICATION_TABS.findIndex(
+                        (candidate) => candidate.id === nextTab,
+                      );
+                      tabRefs.current[nextIndex]?.focus();
+                    }}
                   >
                     {tab.label}
                     <span
                       className={cn(
-                        "grid min-w-4 place-items-center rounded-full px-1 py-0.5 text-[9px] tabular-nums",
+                        "grid min-w-4 place-items-center rounded-full px-1 py-0.5 text-[10px] tabular-nums",
                         active
                           ? "bg-[color:var(--surface)] text-[var(--ink)]"
                           : "bg-[var(--surface-subtle)] text-[var(--ink-faint)]",
@@ -416,6 +440,7 @@ export function NotificationPanel({
           <div
             id={`${panelId}-tabpanel`}
             role="tabpanel"
+            aria-labelledby={`${panelId}-tab-${activeTab}`}
             aria-label={`${NOTIFICATION_TABS.find((tab) => tab.id === activeTab)?.label ?? "All"} activity`}
             className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
           >
@@ -522,7 +547,7 @@ function NotificationRow({
             <h3 className="text-sm font-semibold">{notification.title}</h3>
             <span
               className={cn(
-                "rounded-full border px-1.5 py-0.5 text-[9px] font-semibold",
+                "rounded-full border px-1.5 py-0.5 text-[10px] font-semibold",
                 details.badgeClassName,
               )}
             >

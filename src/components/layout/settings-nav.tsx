@@ -27,7 +27,7 @@ export function SettingsNav() {
             href={href}
             aria-current={current ? "page" : undefined}
             className={cn(
-              "min-h-10 shrink-0 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ink-muted)] outline-none hover:bg-[var(--surface-subtle)] hover:text-[var(--ink)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+              "min-h-11 shrink-0 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ink-muted)] outline-none hover:bg-[var(--surface-subtle)] hover:text-[var(--ink)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
               current && "bg-[var(--nav-active)] text-[var(--ink)]",
             )}
           >

@@ -23,7 +23,7 @@
   --sidebar: #ebe7dc;
   --ink: #211e18;
   --ink-muted: #655f54;
-  --ink-faint: #898174;
+  --ink-faint: #716a61;
   --line: #d8d1c4;
   --line-strong: #bfb5a5;
   --accent: #c87b2a;
@@ -61,7 +61,7 @@
   --sidebar: #11120e;
   --ink: #f1eee6;
   --ink-muted: #aaa499;
-  --ink-faint: #706d65;
+  --ink-faint: #98948a;
   --line: #2c2d25;
   --line-strong: #48473d;
   --accent: #efa94f;
@@ -153,7 +153,7 @@ button {
 
 .dashboard-button {
   display: inline-flex;
-  min-height: 36px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
