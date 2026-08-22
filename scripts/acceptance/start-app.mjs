@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import path from "node:path";
+import { sanitizeApplicationEnvironment } from "./test-environment.mjs";
 
 const root = path.resolve(import.meta.dirname, "..", "..");
 const next = path.join(
@@ -8,12 +9,7 @@ const next = path.join(
   ".bin",
   process.platform === "win32" ? "next.cmd" : "next",
 );
-const safeEnvironment = { ...process.env };
-for (const name of Object.keys(safeEnvironment)) {
-  if (/(SECRET|SERVICE_ROLE|PASSWORD|REFRESH_TOKEN|ACCESS_TOKEN)/i.test(name)) {
-    delete safeEnvironment[name];
-  }
-}
+const safeEnvironment = sanitizeApplicationEnvironment(process.env);
 safeEnvironment.NEXT_PUBLIC_SUPABASE_URL =
   process.env.PHASE1_TEST_SUPABASE_URL;
 safeEnvironment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY =

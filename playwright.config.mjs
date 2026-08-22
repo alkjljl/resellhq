@@ -1,6 +1,8 @@
 import { defineConfig } from "@playwright/test";
+import { sanitizeApplicationEnvironment } from "./scripts/acceptance/test-environment.mjs";
 
 const appUrl = process.env.PHASE1_TEST_APP_URL ?? "http://127.0.0.1:3000";
+const webServerEnvironment = sanitizeApplicationEnvironment(process.env);
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -26,6 +28,7 @@ export default defineConfig({
   },
   webServer: {
     command: "node scripts/acceptance/start-app.mjs",
+    env: webServerEnvironment,
     url: appUrl,
     reuseExistingServer: false,
     timeout: 120_000,

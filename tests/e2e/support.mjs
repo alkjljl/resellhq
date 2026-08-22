@@ -1,12 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { expect } from "@playwright/test";
-import { getTestEnvironment } from "../../scripts/acceptance/test-environment.mjs";
+import { capturePlaywrightTestEnvironment } from "../../scripts/acceptance/test-environment.mjs";
 
-export const testEnvironment = getTestEnvironment();
-// The admin client retains the captured Node-only value. Remove it from the
-// worker environment before Playwright launches a browser child process.
-delete process.env.PHASE1_TEST_SUPABASE_SECRET_KEY;
+// Discovery retains the credential so independently spawned workers can inherit
+// it. Each worker captures and removes its own copy before launching browsers.
+export const testEnvironment = capturePlaywrightTestEnvironment();
 
 export class BrowserFixtures {
   constructor() {

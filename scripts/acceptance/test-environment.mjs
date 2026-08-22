@@ -1,4 +1,36 @@
 const MAIN_PROJECT_REF = "fyosviaioflewfqcdkmx";
+const TEST_SECRET_KEY_VARIABLE = "PHASE1_TEST_SUPABASE_SECRET_KEY";
+const CHILD_PROCESS_SECRET_PATTERN =
+  /(SECRET|SERVICE_ROLE|PASSWORD|REFRESH_TOKEN|ACCESS_TOKEN)/i;
+
+export function capturePlaywrightTestEnvironment(source = process.env) {
+  const environment = getTestEnvironment(source);
+
+  if (isPlaywrightWorker(source)) {
+    delete source[TEST_SECRET_KEY_VARIABLE];
+  }
+
+  return environment;
+}
+
+export function sanitizeApplicationEnvironment(source = process.env) {
+  const safeEnvironment = { ...source };
+
+  for (const name of Object.keys(safeEnvironment)) {
+    if (CHILD_PROCESS_SECRET_PATTERN.test(name)) {
+      delete safeEnvironment[name];
+    }
+  }
+
+  return safeEnvironment;
+}
+
+function isPlaywrightWorker(source) {
+  return (
+    /^\d+$/.test(source.TEST_WORKER_INDEX ?? "") &&
+    /^\d+$/.test(source.TEST_PARALLEL_INDEX ?? "")
+  );
+}
 
 export function getTestEnvironment(source = process.env) {
   const environment = {
