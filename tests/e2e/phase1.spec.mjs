@@ -36,13 +36,13 @@ test.describe.serial("Phase 1 browser acceptance", () => {
     const password = `Phase1!${suffix}`;
     await page.goto("/signup");
     await page.getByLabel("Email address").fill("invalid");
-    await page.getByLabel("Password").fill("short");
+    await page.getByLabel("Password", { exact: true }).fill("short");
     await page.getByLabel("Confirm password").fill("different");
     await page.getByRole("button", { name: "Create account" }).click();
     await expect(page.getByText("Enter a valid email address.")).toBeVisible();
 
     await page.getByLabel("Email address").fill(email);
-    await page.getByLabel("Password").fill(password);
+    await page.getByLabel("Password", { exact: true }).fill(password);
     await page.getByLabel("Confirm password").fill(password);
     await page.getByRole("button", { name: "Create account" }).click();
     await expect(page).toHaveURL(/\/onboarding$/);
