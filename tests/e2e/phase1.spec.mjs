@@ -122,7 +122,9 @@ test.describe.serial("Phase 1 browser acceptance", () => {
       const terms = page.getByRole("checkbox", { name: /I have read and accept/ });
       await expect(terms).not.toBeChecked();
       await page.getByRole("button", { name: "Finish setup" }).click();
-      await expect(page.getByText("Accept the Terms and Privacy Notice.")).toBeVisible();
+      const termsError = page.locator("#acceptedTerms-error");
+      await expect(termsError).toBeVisible();
+      await expect(termsError).toHaveText("Accept the Terms and Privacy Notice.");
       await terms.check();
       await page.getByRole("button", { name: "Finish setup" }).click();
       await expect(page).toHaveURL(/\/dashboard\?setup=complete$/);
