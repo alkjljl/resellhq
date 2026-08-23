@@ -257,6 +257,7 @@ test.describe.serial("Phase 1 browser acceptance", () => {
     await page.getByLabel("Password").fill(user.password);
     await page.getByRole("button", { name: "Log in" }).click();
     await expect(page.getByText("The email or password is incorrect. Try again.")).toBeVisible();
+    await page.getByLabel("Email address").fill(user.email);
     await page.getByLabel("Password").fill(newPassword);
     await page.getByRole("button", { name: "Log in" }).click();
     await expect(page).toHaveURL(/\/onboarding$/);
