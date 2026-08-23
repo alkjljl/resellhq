@@ -13,9 +13,9 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
           Keep account identity, business configuration, and regional defaults accurate.
         </p>
       </header>
-      <div className="mt-6 grid gap-7 lg:grid-cols-[190px_1fr]">
+      <div className="mt-6 grid min-w-0 gap-7 lg:grid-cols-[190px_minmax(0,1fr)]">
         <SettingsNav />
-        <div>{children}</div>
+        <div className="min-w-0">{children}</div>
       </div>
     </div>
   );

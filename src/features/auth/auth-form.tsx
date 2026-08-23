@@ -142,12 +142,12 @@ export function AuthForm({
       <div className="mt-6 flex flex-col gap-3 text-center text-sm text-[var(--ink-muted)]">
         {mode === "login" ? (
           <>
-            <Link href="/forgot-password" className="font-medium hover:underline">
+            <Link href="/forgot-password" className="inline-flex min-h-11 items-center justify-center font-medium hover:underline">
               Forgot your password?
             </Link>
             <p>
               New to ResellHQ?{" "}
-              <Link href="/signup" className="font-semibold text-[var(--ink)] hover:underline">
+              <Link href="/signup" className="inline-flex min-h-11 items-center font-semibold text-[var(--ink)] hover:underline">
                 Create an account
               </Link>
             </p>
@@ -155,7 +155,7 @@ export function AuthForm({
         ) : (
           <p>
             Already have an account?{" "}
-            <Link href="/login" className="font-semibold text-[var(--ink)] hover:underline">
+            <Link href="/login" className="inline-flex min-h-11 min-w-11 items-center justify-center font-semibold text-[var(--ink)] hover:underline">
               Log in
             </Link>
           </p>

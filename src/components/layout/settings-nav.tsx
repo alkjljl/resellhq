@@ -16,8 +16,9 @@ export function SettingsNav() {
   const pathname = usePathname();
   return (
     <nav
-      className="flex gap-1 overflow-x-auto lg:flex-col"
+      className="flex max-w-full gap-1 overflow-x-auto overscroll-x-contain pb-1 lg:flex-col lg:overflow-visible lg:pb-0"
       aria-label="Settings"
+      data-bounded-scroll="settings-navigation"
     >
       {sections.map(([label, href]) => {
         const current = pathname === href;

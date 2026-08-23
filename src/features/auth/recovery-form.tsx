@@ -42,7 +42,7 @@ export function RecoveryForm() {
       </Button>
       <Link
         href="/login"
-        className="block text-center text-sm font-semibold hover:underline"
+        className="flex min-h-11 items-center justify-center text-center text-sm font-semibold hover:underline"
       >
         Back to login
       </Link>

@@ -9,6 +9,8 @@ const description =
   "A worldwide business operating system for independent resale operators.";
 const fontStylesheet =
   "https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&f[]=gambetta@500,600&f[]=azeret-mono@400,500&display=swap";
+const dataFontStylesheet =
+  "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap";
 
 export async function generateMetadata(): Promise<Metadata> {
   let origin = "http://localhost:3000";
@@ -70,7 +72,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://cdn.fontshare.com"
           crossOrigin="anonymous"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link rel="stylesheet" href={fontStylesheet} />
+        <link rel="stylesheet" href={dataFontStylesheet} />
       </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>

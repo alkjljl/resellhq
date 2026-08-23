@@ -51,7 +51,7 @@ export function TeamMembersSettings({
         <article className="rounded-lg border border-[var(--line)]">
           <div className="grid gap-5 p-4 sm:p-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(120px,.55fr)_minmax(160px,.75fr)] lg:items-center">
             <div className="flex min-w-0 items-start gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
                 <UserRound className="size-[18px]" aria-hidden="true" />
               </span>
               <div className="min-w-0">
@@ -65,12 +65,12 @@ export function TeamMembersSettings({
             </div>
 
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.07em] text-[var(--ink-faint)]">
                 Role
               </p>
               <p className="mt-1 flex items-center gap-1.5 text-sm font-semibold">
                 <ShieldCheck
-                  className="size-4 text-[var(--accent)]"
+                  className="size-4 text-[var(--accent-strong)]"
                   aria-hidden="true"
                 />
                 Owner
@@ -79,13 +79,13 @@ export function TeamMembersSettings({
 
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-1">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.07em] text-[var(--ink-faint)]">
                   Account status
                 </p>
                 <p className="mt-1 text-sm font-medium">{member.status}</p>
               </div>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.07em] text-[var(--ink-faint)]">
                   Last active
                 </p>
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-[var(--ink-muted)]">
@@ -186,7 +186,7 @@ export function TeamMembersSettings({
             >
               <div className="flex items-center gap-2">
                 <UsersRound
-                  className="size-4 text-[var(--accent)]"
+                  className="size-4 text-[var(--accent-strong)]"
                   aria-hidden="true"
                 />
                 <h3 className="text-sm font-semibold">{role.name}</h3>

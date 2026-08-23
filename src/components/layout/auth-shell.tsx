@@ -22,7 +22,7 @@ export function AuthShell({
             <ThemeMenu />
             <Link
               href="/"
-              className="rounded-sm text-sm font-medium text-[var(--ink-muted)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+              className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-[var(--ink-muted)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
             >
               <span className="sm:hidden">Overview</span>
               <span className="hidden sm:inline">Back to overview</span>

@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           </p>
           <Link
             href="/signup"
-            className="mt-8 inline-flex min-h-11 items-center font-medium text-[var(--accent)] underline underline-offset-4"
+            className="mt-8 inline-flex min-h-11 items-center font-medium text-[var(--accent-strong)] underline underline-offset-4"
           >
             Return to account creation
           </Link>

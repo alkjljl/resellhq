@@ -346,7 +346,7 @@ export function NotificationPanel({
                   </h2>
                   <p
                     id={descriptionId}
-                    className="mt-0.5 text-[11px] font-medium text-[var(--ink-muted)]"
+                    className="mt-0.5 text-xs font-medium text-[var(--ink-muted)]"
                   >
                     {counts.unread > 0
                       ? `${counts.unread} new`
@@ -358,7 +358,7 @@ export function NotificationPanel({
               <Button
                 variant="ghost"
                 size="sm"
-                className="min-h-11 shrink-0 rounded-lg px-2.5 text-xs text-[var(--accent-strong)]"
+                className="min-h-11 shrink-0 rounded-lg px-2.5 text-sm text-[var(--accent-strong)]"
                 disabled={counts.unread === 0}
                 onClick={markAllRead}
               >
@@ -371,6 +371,7 @@ export function NotificationPanel({
               role="tablist"
               aria-label="Activity filters"
               className="mt-2 flex min-w-0 gap-1 overflow-x-auto pb-1"
+              data-bounded-scroll="activity-filters"
             >
               {NOTIFICATION_TABS.map((tab) => {
                 const count =
@@ -399,7 +400,7 @@ export function NotificationPanel({
                     aria-controls={`${panelId}-tabpanel`}
                     tabIndex={active ? 0 : -1}
                     className={cn(
-                      "flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+                      "flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
                       active
                         ? "bg-[var(--accent)] text-[var(--accent-ink)]"
                         : "text-[var(--ink-muted)] hover:bg-[var(--surface-subtle)] hover:text-[var(--ink)]",
@@ -423,7 +424,7 @@ export function NotificationPanel({
                     {tab.label}
                     <span
                       className={cn(
-                        "grid min-w-4 place-items-center rounded-full px-1 py-0.5 text-[10px] tabular-nums",
+                        "grid min-w-5 place-items-center rounded-full px-1 py-0.5 text-xs tabular-nums",
                         active
                           ? "bg-[color:var(--surface)] text-[var(--ink)]"
                           : "bg-[var(--surface-subtle)] text-[var(--ink-faint)]",
@@ -487,7 +488,7 @@ export function NotificationPanel({
               </p>
               <Link
                 href="/settings/preferences#activity"
-                className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-[var(--ink-muted)] outline-none transition-colors hover:bg-[var(--surface-strong)] hover:text-[var(--ink)] active:bg-[var(--nav-active)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+                className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-md px-2 text-sm font-medium text-[var(--ink-muted)] outline-none transition-colors hover:bg-[var(--surface-strong)] hover:text-[var(--ink)] active:bg-[var(--nav-active)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
                 onClick={() => closePanel("navigate")}
               >
                 <Cog className="size-3.5 shrink-0" aria-hidden="true" />
@@ -547,18 +548,18 @@ function NotificationRow({
             <h3 className="text-sm font-semibold">{notification.title}</h3>
             <span
               className={cn(
-                "rounded-full border px-1.5 py-0.5 text-[10px] font-semibold",
+                "rounded-full border px-1.5 py-0.5 text-xs font-semibold",
                 details.badgeClassName,
               )}
             >
               {details.label}
             </span>
           </div>
-          <time className="font-data shrink-0 text-[10px] text-[var(--ink-faint)]">
+          <time className="font-data shrink-0 text-xs text-[var(--ink-faint)]">
             {notification.timestamp}
           </time>
         </div>
-        <p className="mt-0.5 text-[11px] font-medium text-[var(--ink-muted)]">
+        <p className="mt-0.5 text-xs font-medium text-[var(--ink-muted)]">
           {notification.context}
         </p>
         <p className="mt-1.5 text-sm leading-5 text-[var(--ink)]">

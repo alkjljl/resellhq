@@ -530,7 +530,7 @@ export function OnboardingForm({
                     href="/terms"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-medium text-[var(--accent)] underline underline-offset-4"
+                    className="font-medium text-[var(--accent-strong)] underline underline-offset-4"
                   >
                     Terms
                   </Link>{" "}
@@ -539,7 +539,7 @@ export function OnboardingForm({
                     href="/privacy"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-medium text-[var(--accent)] underline underline-offset-4"
+                    className="font-medium text-[var(--accent-strong)] underline underline-offset-4"
                   >
                     Privacy Notice
                   </Link>

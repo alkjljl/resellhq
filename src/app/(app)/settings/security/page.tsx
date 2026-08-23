@@ -44,7 +44,7 @@ export default async function SecuritySettingsPage({
               key={provider}
               className="flex items-center gap-3 border-b border-[var(--line)] py-3 first:pt-0 last:border-0 last:pb-0"
             >
-              <span className="grid size-9 place-items-center rounded-md bg-[var(--surface-subtle)] text-[var(--accent)]">
+              <span className="grid size-9 place-items-center rounded-md bg-[var(--surface-subtle)] text-[var(--accent-strong)]">
                 <ShieldCheck className="size-[18px]" />
               </span>
               <div>

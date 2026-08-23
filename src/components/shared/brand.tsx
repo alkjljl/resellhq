@@ -14,7 +14,7 @@ export function Brand({
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center gap-2.5 rounded-sm font-semibold tracking-[-0.025em] text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
+        "inline-flex min-h-11 min-w-11 items-center gap-2.5 rounded-sm text-sm font-semibold tracking-[-0.025em] text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]",
         className,
       )}
       aria-label="ResellHQ home"

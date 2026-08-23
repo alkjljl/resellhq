@@ -4,6 +4,12 @@
   --font-sans: var(--font-ui);
   --font-serif: var(--font-display);
   --font-mono: var(--font-data);
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.5rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.625rem;
 }
 
 :root {
@@ -13,8 +19,8 @@
     "Segoe UI", sans-serif;
   --font-display: "Gambetta", Georgia, "Times New Roman", ui-serif, serif;
   --font-data:
-    "Azeret Mono", "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace,
-    monospace;
+    "IBM Plex Mono", "Azeret Mono", "SFMono-Regular", Consolas,
+    "Liberation Mono", ui-monospace, monospace;
   --canvas: #f3f0e8;
   --canvas-header: rgb(243 240 232 / 0.94);
   --surface: #faf8f2;
@@ -23,12 +29,12 @@
   --sidebar: #ebe7dc;
   --ink: #211e18;
   --ink-muted: #655f54;
-  --ink-faint: #716a61;
+  --ink-faint: #6d665d;
   --line: #d8d1c4;
   --line-strong: #bfb5a5;
   --accent: #c87b2a;
   --accent-hover: #ae661d;
-  --accent-strong: #9b5a19;
+  --accent-strong: #914f12;
   --accent-ink: #21170b;
   --accent-soft: #f5dfbf;
   --accent-line: #d9a461;
@@ -98,11 +104,13 @@ html {
 }
 
 body {
-  min-width: 320px;
+  min-height: 100%;
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
   font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.625;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -124,10 +132,10 @@ button {
 }
 
 .eyebrow {
-  font-size: 0.68rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.11em;
-  line-height: 1.25;
+  letter-spacing: 0.09em;
+  line-height: 1.35;
   text-transform: uppercase;
   color: var(--ink-faint);
 }
@@ -159,7 +167,7 @@ button {
   gap: 0.45rem;
   border-radius: 4px;
   padding: 0 1rem;
-  font-size: 10px;
+  font-size: 0.875rem;
   font-weight: 600;
   outline: none;
   transition:
@@ -260,7 +268,7 @@ button {
   border-radius: 0.25rem;
   padding: 0 0.42rem;
   color: var(--ink-faint);
-  font-size: 0.58rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -268,6 +276,14 @@ button {
 
 .auth-canvas {
   background-color: var(--canvas);
+}
+
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+  }
 }
 
 @keyframes fade-in {

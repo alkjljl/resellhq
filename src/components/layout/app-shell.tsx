@@ -113,17 +113,17 @@ export function AppShell({
         <Sidebar workspaceName={workspaceName} />
       </aside>
 
-      <div className="xl:pl-[252px]">
-        <header className="sticky top-0 z-20 flex h-[58px] items-center border-b border-[var(--line)] bg-[color:var(--canvas-header)] px-4 sm:px-6 lg:px-7">
+      <div className="min-w-0 xl:pl-[252px]">
+        <header className="sticky top-0 z-20 flex min-h-[58px] min-w-0 items-center border-b border-[var(--line)] bg-[color:var(--canvas-header)] px-2 sm:px-6 lg:px-7">
           <MobileNavigation workspaceName={workspaceName} />
 
-          <div className="ml-3 hidden min-w-0 items-center gap-2 text-[11px] text-[var(--ink-faint)] sm:flex xl:ml-0">
+          <div className="ml-3 hidden min-w-0 items-center gap-2 text-xs text-[var(--ink-faint)] sm:flex xl:ml-0">
             <span>{breadcrumb.section}</span>
             <span className="text-[var(--line-strong)]">/</span>
             <span className="text-[var(--ink)]">{breadcrumb.page}</span>
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex min-w-0 items-center gap-1 sm:gap-2">
             <label className="relative hidden lg:block">
               <span className="sr-only">Search ResellHQ is not yet available</span>
               <Search
@@ -135,7 +135,7 @@ export function AppShell({
                 placeholder="Search is not yet available"
                 disabled
                 title="Search is not yet available"
-                className="h-9 w-[220px] cursor-not-allowed border border-[var(--line)] bg-[var(--surface)] pl-9 pr-3 text-[11px] text-[var(--ink)] opacity-70 outline-none placeholder:text-[var(--ink-faint)]"
+                className="h-11 w-[220px] cursor-not-allowed border border-[var(--line)] bg-[var(--surface)] pl-9 pr-3 text-sm text-[var(--ink)] opacity-70 outline-none placeholder:text-[var(--ink-faint)]"
               />
             </label>
 
@@ -148,7 +148,7 @@ export function AppShell({
             />
           </div>
         </header>
-        <main>{children}</main>
+        <main className="min-w-0">{children}</main>
       </div>
     </div>
   );
@@ -195,7 +195,7 @@ function Sidebar({
       >
         {navigationGroups.map((group, groupIndex) => (
           <div key={group.label} className={cn(groupIndex > 0 && "mt-4")}>
-            <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+            <p className="px-2 pb-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-[var(--ink-faint)]">
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -209,7 +209,7 @@ function Sidebar({
                       ? pathname.startsWith("/settings")
                       : false;
                 const common = cn(
-                  "flex min-h-11 w-full items-center gap-3 rounded-[3px] px-3 text-xs outline-none transition-colors",
+                  "flex min-h-11 w-full items-center gap-3 rounded-[3px] px-3 text-sm outline-none transition-colors",
                   current
                     ? "bg-[var(--nav-active)] text-[var(--ink)] shadow-[inset_2px_0_var(--accent)]"
                     : "text-[var(--ink-muted)] hover:bg-[var(--surface-subtle)] hover:text-[var(--ink)]",
@@ -239,7 +239,7 @@ function Sidebar({
                     <Icon className="size-[14px]" strokeWidth={1.5} />
                     <span className="flex-1">{item.label}</span>
                     {"badge" in item ? (
-                      <span className="border border-[var(--line-strong)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--ink-faint)]">
+                      <span className="border border-[var(--line-strong)] px-1.5 py-0.5 text-xs font-semibold uppercase tracking-[0.06em] text-[var(--ink-faint)]">
                         {item.badge}
                       </span>
                     ) : null}
@@ -256,7 +256,7 @@ function Sidebar({
           type="button"
           disabled
           title="Help and support is not yet available"
-          className="flex min-h-11 w-full cursor-not-allowed items-center gap-3 text-[10px] text-[var(--ink-faint)] opacity-70"
+          className="flex min-h-11 w-full cursor-not-allowed items-center gap-3 text-sm text-[var(--ink-faint)] opacity-70"
         >
           <Headphones className="size-[14px]" strokeWidth={1.5} />
           Help &amp; support
@@ -287,7 +287,7 @@ function MobileNavigation({
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 data-[state=open]:animate-[fade-in_150ms_ease-out]" />
-        <Dialog.Content className="fixed inset-y-0 left-0 z-50 w-[min(88vw,300px)] border-r border-[var(--line)] bg-[var(--sidebar)] shadow-[var(--shadow-lg)] outline-none data-[state=open]:animate-[drawer-in_180ms_ease-out]">
+        <Dialog.Content className="fixed inset-y-0 left-0 z-50 w-[min(92vw,320px)] overflow-y-auto border-r border-[var(--line)] bg-[var(--sidebar)] shadow-[var(--shadow-lg)] outline-none data-[state=open]:animate-[drawer-in_180ms_ease-out]">
           <Dialog.Title className="sr-only">Workspace navigation</Dialog.Title>
           <Dialog.Description className="sr-only">
             Navigate ResellHQ sections.
@@ -327,10 +327,10 @@ function UserMenu({
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button className="ml-0.5 flex h-11 items-center gap-2 rounded-sm px-1.5 outline-none hover:bg-[var(--surface-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--focus)]">
-          <span className="grid size-7 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface-subtle)] text-[10px] font-semibold text-[var(--accent-strong)]">
+          <span className="grid size-7 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface-subtle)] text-xs font-semibold text-[var(--accent-strong)]">
             {initial}
           </span>
-          <span className="hidden max-w-24 truncate text-[11px] font-medium sm:block">
+          <span className="hidden max-w-24 truncate text-xs font-medium sm:block">
             {displayName}
           </span>
           <ChevronDown className="size-3 text-[var(--ink-faint)]" />

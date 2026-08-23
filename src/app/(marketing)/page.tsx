@@ -59,9 +59,9 @@ export default async function MarketingPage() {
           <Brand compact className="sm:hidden" />
           <Brand className="hidden sm:inline-flex" />
           <nav className="ml-auto hidden items-center gap-7 text-sm text-[var(--ink-muted)] md:flex" aria-label="Main">
-            <a href="#why" className="hover:text-[var(--ink)]">Why ResellHQ</a>
-            <a href="#workflow" className="hover:text-[var(--ink)]">Workflow</a>
-            <a href="#roadmap" className="hover:text-[var(--ink)]">Roadmap</a>
+            <a href="#why" className="inline-flex min-h-11 items-center hover:text-[var(--ink)]">Why ResellHQ</a>
+            <a href="#workflow" className="inline-flex min-h-11 items-center hover:text-[var(--ink)]">Workflow</a>
+            <a href="#roadmap" className="inline-flex min-h-11 items-center hover:text-[var(--ink)]">Roadmap</a>
           </nav>
           <div className="ml-auto flex items-center gap-2 md:ml-8">
             <ThemeMenu />
@@ -86,10 +86,10 @@ export default async function MarketingPage() {
 
       <main>
         <section className="border-b border-[var(--line)] bg-[var(--surface)]">
-          <div className="mx-auto grid min-h-[690px] max-w-[1240px] items-center gap-12 px-5 py-16 sm:px-7 lg:grid-cols-[1.03fr_.97fr] lg:px-9 lg:py-20">
-            <div>
+          <div className="mx-auto grid min-h-[690px] max-w-[1240px] items-center gap-12 px-5 py-16 sm:px-7 lg:grid-cols-[minmax(0,1.03fr)_minmax(0,.97fr)] lg:px-9 lg:py-20">
+            <div className="min-w-0">
               <p className="eyebrow">The operating system for independent resale</p>
-              <h1 className="display-heading mt-5 max-w-3xl text-[46px] leading-[0.98] tracking-[-0.06em] sm:text-[64px] lg:text-[72px]">
+              <h1 className="display-heading mt-5 max-w-3xl text-[clamp(2.625rem,8vw,4.5rem)] leading-[1.02] tracking-[-0.055em]">
                 Run the business behind every resale.
               </h1>
               <p className="mt-7 max-w-xl text-base leading-7 text-[var(--ink-muted)] sm:text-lg">
@@ -113,7 +113,7 @@ export default async function MarketingPage() {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative min-w-0">
               <div className="border border-[var(--line-strong)] bg-[var(--canvas)] p-3 shadow-[var(--shadow-md)]">
                 <div className="border border-[var(--line)] bg-[var(--surface)]">
                   <div className="flex items-center border-b border-[var(--line)] px-4 py-3">
@@ -123,7 +123,7 @@ export default async function MarketingPage() {
                       </span>
                       <div>
                         <p className="text-xs font-semibold">Operator workspace</p>
-                        <p className="text-[10px] text-[var(--ink-faint)]">Foundation map</p>
+                        <p className="text-xs text-[var(--ink-faint)]">Foundation map</p>
                       </div>
                     </div>
                   </div>
@@ -142,11 +142,11 @@ export default async function MarketingPage() {
                           {item}
                         </div>
                       ))}
-                      <p className="mt-5 px-2 text-[10px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
+                      <p className="mt-5 px-2 text-xs font-semibold uppercase tracking-[0.07em] text-[var(--ink-faint)]">
                         Upcoming
                       </p>
                       {["Inventory", "Listings", "Sales"].map((item) => (
-                        <div key={item} className="px-2 py-1.5 text-[11px] text-[var(--ink-faint)]">
+                        <div key={item} className="px-2 py-1.5 text-xs text-[var(--ink-faint)]">
                           {item}
                         </div>
                       ))}
@@ -225,7 +225,7 @@ export default async function MarketingPage() {
               {workflow.map(([title, copy, status], index) => (
                 <li key={title} className="border-b border-[var(--line)] p-6 last:border-0 md:border-b-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[var(--accent)]">0{index + 1}</span>
+                    <span className="text-xs font-semibold text-[var(--accent-strong)]">0{index + 1}</span>
                     <span className="status-pill">{status}</span>
                   </div>
                   <h3 className="mt-8 text-lg font-semibold">{title}</h3>
@@ -256,12 +256,12 @@ export default async function MarketingPage() {
                 const Icon = item.icon;
                 return (
                   <article key={item.title} className="bg-[var(--surface)] p-6">
-                    <Icon className="size-5 text-[var(--accent)]" />
+                    <Icon className="size-5 text-[var(--accent-strong)]" />
                     <h3 className="mt-8 text-base font-semibold">{item.title}</h3>
                     <p className="mt-3 text-sm leading-6 text-[var(--ink-muted)]">
                       {item.copy}
                     </p>
-                    <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.09em] text-[var(--ink-faint)]">
+                    <p className="mt-6 text-xs font-semibold uppercase tracking-[0.07em] text-[var(--ink-faint)]">
                       Upcoming
                     </p>
                   </article>
@@ -298,7 +298,7 @@ export default async function MarketingPage() {
         <section id="product" className="scroll-mt-20 border-b border-[var(--line)] bg-[var(--surface)]">
           <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-20 sm:px-7 lg:grid-cols-[.8fr_1.2fr] lg:px-9 lg:py-24">
             <div>
-              <LockKeyhole className="size-6 text-[var(--accent)]" />
+              <LockKeyhole className="size-6 text-[var(--accent-strong)]" />
               <p className="eyebrow mt-5">Ready to use</p>
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.045em]">
                 Start with a foundation you will keep.

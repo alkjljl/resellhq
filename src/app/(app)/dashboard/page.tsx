@@ -49,12 +49,12 @@ export default async function DashboardPage({
             <h1 className="display-heading mt-2 text-[34px] leading-none tracking-[-0.035em] sm:text-[40px]">
               Your resale desk
             </h1>
-            <p className="mt-3 text-[12px] text-[var(--ink-muted)]">
+            <p className="mt-3 max-w-2xl text-base leading-7 text-[var(--ink-muted)]">
               See what is moving, what is stuck, and what you actually keep.
             </p>
           </div>
 
-          <div className="flex gap-2 sm:pb-0.5">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:pb-0.5">
             <button
               type="button"
               disabled
@@ -78,17 +78,17 @@ export default async function DashboardPage({
         </header>
 
         <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(250px,.9fr)]">
-          <section className="profit-ticket">
-            <div className="flex items-start justify-between gap-4">
+          <section className="profit-ticket" data-decoration-boundary>
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
               <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--ink-muted)]">
+                <p className="text-xs font-medium uppercase tracking-[0.06em] text-[var(--ink-muted)]">
                   Net profit · planned reporting
                 </p>
                 <p className="display-heading mt-2 text-[46px] leading-none tabular-nums tracking-[-0.045em] sm:text-[52px]">
                   —
                 </p>
               </div>
-              <span className="rounded-full border border-[var(--line-strong)] px-3 py-1 text-[10px] text-[var(--ink-muted)]">
+              <span className="rounded-full border border-[var(--line-strong)] px-3 py-1 text-xs text-[var(--ink-muted)]">
                 Not yet available
               </span>
             </div>
@@ -102,11 +102,11 @@ export default async function DashboardPage({
                     key={label}
                     className="relative pr-4 sm:border-r sm:border-dashed sm:border-[var(--line)] sm:pl-4 sm:first:pl-0 sm:last:border-r-0"
                   >
-                    <p className="text-[10px] text-[var(--ink-faint)]">
+                    <p className="text-xs text-[var(--ink-faint)]">
                       {label}
                     </p>
                     <p
-                      className={`data-value mt-2 text-[11px] ${
+                      className={`data-value mt-2 text-sm ${
                         index === 3 ? "text-[var(--accent-strong)]" : ""
                       }`}
                     >
@@ -117,7 +117,7 @@ export default async function DashboardPage({
               )}
             </div>
 
-            <div className="mt-6 flex items-center justify-between border-t border-dashed border-[var(--line)] pt-5 text-[10px] text-[var(--ink-faint)]">
+            <div className="mt-6 flex flex-col gap-2 border-t border-dashed border-[var(--line)] pt-5 text-xs text-[var(--ink-faint)] sm:flex-row sm:items-center sm:justify-between">
               <span>Profit reporting is planned and not yet connected.</span>
               <span className="text-[var(--ink-muted)]">
                 No business data is connected.
@@ -136,14 +136,14 @@ export default async function DashboardPage({
             ].map(([number, label, detail]) => (
               <div
                 key={label}
-                className="grid min-h-[82px] grid-cols-[24px_1fr_auto] items-center border-b border-[var(--line)] px-3 last:border-b-0"
+                className="grid min-h-[88px] grid-cols-[28px_minmax(0,1fr)_auto] items-center gap-2 border-b border-[var(--line)] px-3 last:border-b-0"
               >
-                <span className="font-data self-start pt-5 text-[10px] text-[var(--ink-faint)]">
+                <span className="font-data self-start pt-5 text-xs text-[var(--ink-faint)]">
                   {number}
                 </span>
                 <div>
-                  <p className="text-[10px] text-[var(--ink-muted)]">{label}</p>
-                  <p className="mt-3 text-[10px] text-[var(--ink-faint)]">{detail}</p>
+                  <p className="text-xs font-medium text-[var(--ink-muted)]">{label}</p>
+                  <p className="mt-2 text-xs text-[var(--ink-faint)]">{detail}</p>
                 </div>
                 <p className="data-value text-[22px] font-medium tracking-[-0.035em]">
                   —
@@ -155,27 +155,27 @@ export default async function DashboardPage({
 
         <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(260px,.95fr)]">
           <section className="ledger-panel min-h-[310px]">
-            <div className="flex items-center justify-between border-b border-[var(--line)] px-4 py-4 sm:px-5">
-              <div className="flex items-start gap-3">
-                <span className="font-data text-[10px] text-[var(--ink-faint)]">A</span>
+            <div className="flex flex-col gap-3 border-b border-[var(--line)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div className="flex min-w-0 items-start gap-3">
+                <span className="font-data text-xs text-[var(--ink-faint)]">A</span>
                 <div>
                   <h2 className="text-[17px] font-semibold leading-none tracking-[-0.02em]">
                     Profit trail
                   </h2>
-                  <p className="mt-2 text-[10px] text-[var(--ink-faint)]">
+                  <p className="mt-2 text-xs text-[var(--ink-faint)]">
                     Planned reporting for future sales data.
                   </p>
                 </div>
               </div>
               <div
-                className="font-data flex items-center gap-5 text-[10px] uppercase text-[var(--ink-faint)]"
+                className="font-data flex items-center justify-between gap-3 text-xs uppercase text-[var(--ink-faint)] sm:justify-start sm:gap-5"
                 aria-label="Reporting time ranges are not yet available"
               >
                 <button
                   type="button"
                   disabled
                   title="Reporting is not yet available"
-                  className="min-h-11 cursor-not-allowed border-b border-[var(--accent)] px-1 text-[var(--ink)]"
+                  className="min-h-11 min-w-11 cursor-not-allowed border-b border-[var(--accent)] px-1 text-[var(--ink)]"
                 >
                   30d
                 </button>
@@ -183,7 +183,7 @@ export default async function DashboardPage({
                   type="button"
                   disabled
                   title="Reporting is not yet available"
-                  className="min-h-11 cursor-not-allowed px-1"
+                  className="min-h-11 min-w-11 cursor-not-allowed px-1"
                 >
                   12m
                 </button>
@@ -191,7 +191,7 @@ export default async function DashboardPage({
                   type="button"
                   disabled
                   title="Reporting is not yet available"
-                  className="min-h-11 cursor-not-allowed px-1"
+                  className="min-h-11 min-w-11 cursor-not-allowed px-1"
                 >
                   All
                 </button>
@@ -199,26 +199,26 @@ export default async function DashboardPage({
             </div>
 
             <div className="profit-plot relative mx-4 mt-5 min-h-[200px] border-b border-l border-[var(--line)] sm:mx-5">
-              <div className="absolute inset-x-0 bottom-8 flex items-center justify-between px-3">
-                <div className="flex items-center gap-3">
+              <div className="absolute inset-x-0 bottom-8 flex min-w-0 items-center justify-between px-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <span className="size-3 rounded-full bg-[var(--accent)]" />
-                  <div>
-                    <p className="text-[10px] font-semibold">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold">
                       Reporting not available
                     </p>
-                    <p className="mt-1 text-[10px] text-[var(--ink-faint)]">
+                    <p className="mt-1 text-xs leading-5 text-[var(--ink-faint)]">
                       Sales data will appear here when tracking is available.
                     </p>
                   </div>
                 </div>
-                <span className="hidden text-[10px] text-[var(--ink-muted)] sm:block">
+                <span className="hidden text-xs text-[var(--ink-muted)] sm:block">
                   Sales tracking planned
                 </span>
               </div>
-              <span className="absolute -bottom-5 left-0 text-[10px] text-[var(--ink-faint)]">
+              <span className="absolute -bottom-6 left-0 text-xs text-[var(--ink-faint)]">
                 Start
               </span>
-              <span className="absolute -bottom-5 right-0 text-[10px] text-[var(--ink-faint)]">
+              <span className="absolute -bottom-6 right-0 text-xs text-[var(--ink-faint)]">
                 Now
               </span>
             </div>
@@ -226,12 +226,12 @@ export default async function DashboardPage({
 
           <section className="ledger-panel">
             <div className="flex items-start gap-3 border-b border-[var(--line)] px-4 py-4">
-              <span className="font-data text-[10px] text-[var(--ink-faint)]">B</span>
+              <span className="font-data text-xs text-[var(--ink-faint)]">B</span>
               <div>
                 <h2 className="text-[17px] font-semibold leading-none tracking-[-0.02em]">
                   Stock pipeline
                 </h2>
-                <p className="mt-2 text-[10px] text-[var(--ink-faint)]">
+                <p className="mt-2 text-xs text-[var(--ink-faint)]">
                   Planned inventory stages.
                 </p>
               </div>
@@ -253,8 +253,8 @@ export default async function DashboardPage({
                     }`}
                   />
                   <div>
-                    <p className="text-[10px] font-medium">{item.label}</p>
-                    <p className="mt-1 text-[10px] text-[var(--ink-faint)]">
+                    <p className="text-sm font-medium">{item.label}</p>
+                    <p className="mt-1 text-xs text-[var(--ink-faint)]">
                       {item.detail}
                     </p>
                   </div>
