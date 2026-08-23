@@ -246,7 +246,7 @@ test.describe.serial("Phase 1 browser acceptance", () => {
     const recoveryLink = await getLatestMailLink(user.email, "recovery");
     await page.goto(recoveryLink);
     await expect(page).toHaveURL(/\/reset-password$/);
-    await page.getByLabel("New password").fill(newPassword);
+    await page.getByLabel("New password", { exact: true }).fill(newPassword);
     await page.getByLabel("Confirm new password").fill(newPassword);
     await page.getByRole("button", { name: "Update password" }).click();
     await expect(page.getByText("Password changed. You can return to your workspace.")).toBeVisible();
