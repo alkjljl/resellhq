@@ -200,7 +200,7 @@ test.describe.serial("Phase 1 browser acceptance", () => {
     const user = await fixtures.createUser("logout", { completed: true });
     await loginViaUi(page, user, /\/dashboard$/);
     await page.getByRole("button", { name: /Open account menu/ }).click();
-    const logout = page.getByRole("button", { name: "Log out" });
+    const logout = page.getByRole("menuitem", { name: "Log out" });
     await logout.click();
     await expect(page).toHaveURL(/\/login$/);
     await page.goto("/dashboard");
